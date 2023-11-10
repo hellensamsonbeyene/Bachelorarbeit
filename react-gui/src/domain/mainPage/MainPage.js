@@ -39,17 +39,17 @@ const MainPage = () => {
             },
             warning: {
                 main: '#ed6c02'
-            }
+            },
         },
     });
 
     return (
-        <React.Fragment>
+        <>
             <ThemeProvider theme={theme}>
                 <NavigationBar/>
-                <EditChatbot/>
             </ThemeProvider>
-        </React.Fragment>
+            <EditChatbot/>
+        </>
     );
 
 }
