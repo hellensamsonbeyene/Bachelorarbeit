@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 
+
 const FileDropArea = () => {
     const [successMessage, setSuccessMessage] = useState(null);
     const fileInputRef = useRef(null);

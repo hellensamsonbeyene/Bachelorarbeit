@@ -3,7 +3,7 @@ import React from "react";
 
 import {ThemeProvider, createTheme} from '@mui/material/styles';
 import NavigationBar from "../../NavigationBar/NavigationBar";
-import EditChatbot from "../../components/EditChatbot/EditChatbot";
+import CustomChatbot from "../../components/EditChatbot/CustomChatbot";
 //custom
 
 
@@ -44,7 +44,7 @@ const MainPage = () => {
             <ThemeProvider theme={theme}>
                 <NavigationBar/>
             </ThemeProvider>
-            <EditChatbot/>
+            <CustomChatbot/>
         </>
     );
 
