@@ -37,13 +37,13 @@ const FileDropArea = () => {
                 console.log('File Content (as JSON):', JSON.stringify(jsonContent, null, 2));
 
                 // Set the success message
-                setSuccessMessage('File uploaded successfully!');
+                setSuccessMessage('Datei erfolgreich hochgeladen!');
             };
 
             reader.readAsText(file);
         } else {
             setSuccessMessage(null);
-            console.error('Invalid file type. Please upload a .txt file.');
+            console.error('Invalides Dateiformat. Bitte laden Sie eine .txt Datei hoch.');
         }
     };
 

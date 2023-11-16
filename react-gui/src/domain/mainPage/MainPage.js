@@ -10,8 +10,7 @@ import EditChatbot from "../../components/EditChatbot/EditChatbot";
 
 // default colors
 const palette = {
-    primary: '#008587', // buttons, sliders, selected nodes
-    secondary: '#3DC72E',
+    primary: '#008587'
 }
 
 const MainPage = () => {
@@ -24,9 +23,6 @@ const MainPage = () => {
         palette: {
             primary: {
                 main: getColorPalette['primary'], // buttons, sliders
-            },
-            secondary: {
-                main: getColorPalette['secondary'],
             },
             info: {
                 main: getColorPalette['primary'],
