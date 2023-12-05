@@ -1,37 +1,26 @@
-// apiActions.js
+// apiService.js
 
-import axios from 'axios';
+const API_BASE_URL = 'https:localhost:8080'; // Ersetze dies durch deine API-Basis-URL
 
-export const apiRequest = () => ({ type: 'API_REQUEST' });
-export const apiSuccess = (data) => ({ type: 'API_SUCCESS', payload: data });
-export const apiFailure = (error) => ({ type: 'API_FAILURE', payload: error });
-
-export const analyzeAnswer = () => {
-    return async (dispatch) => {
-        dispatch(apiRequest());
+export const addPost = (userInput) => {
+    return async () => {
         try {
-            const response = await axios.get('https://api.example.com/data');
-            dispatch(apiSuccess(response.data));
+            // Logik für den API-Aufruf oder andere asynchrone Operationen
+            const response = await fetch(`${API_BASE_URL}/analyze`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userInput }),
+            });
+
+            // Hier kannst du weitere Logik für die Antwortverarbeitung implementieren
+           // dispatch(analyzeSuccess(data)); // Beispiel für eine weitere Aktion, die den Redux-Store aktualisiert
+
+            return await response.json(); // Die Antwort wird an die Komponente weitergegeben
         } catch (error) {
-            dispatch(apiFailure(error.message));
-        }
-    };
-};
-
-export const postRequest = (postData) => {
-    return async (dispatch) => {
-        try {
-            // Optional: Dispatch eine Aktion, um den Ladezustand anzuzeigen
-            dispatch({ type: 'POST_REQUEST_START' });
-
-            // POST-Anfrage mit axios durchführen
-            const response = await axios.post('http://localhost:8080/analyze', postData);
-
-            // Optional: Dispatch eine Aktion, um den Erfolg anzuzeigen
-            dispatch({ type: 'POST_REQUEST_SUCCESS', payload: response.data });
-        } catch (error) {
-            // Optional: Dispatch eine Aktion, um den Fehler anzuzeigen
-            dispatch({ type: 'POST_REQUEST_FAILURE', payload: error.message });
+            console.error('Fehler bei der Analyse:', error);
+            throw error;
         }
     };
 };

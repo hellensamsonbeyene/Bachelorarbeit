@@ -8,6 +8,8 @@ import {Grid} from "@mui/material";
 import FileDropArea from "../FileDropArea";
 import PersonIcon from '@mui/icons-material/Person';
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
+import ChatbotService from "../../services/ChatbotService";
+
 
 const theme = {
     background: '#f5f8fb',
@@ -24,32 +26,37 @@ const CustomChatbot = () => {
     const [userInput, setUserInput] = useState('');
     const [messages, setMessages] = useState([]);
     const messagesEndRef = useRef(null);
+    const [showError, setShowError] = useState(false);
+    const [error, setError] = useState("");
+
 
     useEffect(() => {
         // Scrollt automatisch nach unten, wenn neue Nachrichten hinzugefügt werden
         messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
-    const handleUserInput = () => {
-        // Hier kannst du die Logik für die Verarbeitung der Benutzereingabe implementieren
-        const response = generateResponse(userInput);
 
-        // Füge die Benutzer- und Bot-Nachrichten zur Nachrichtenliste hinzu
-        setMessages((prevMessages) => [
-            ...prevMessages,
-            { role: 'user', content: userInput },
-            { role: 'bot', content: response },
-        ]);
 
-        // Leere die Benutzereingabe
-        setUserInput('');
-    };
 
-    const generateResponse = (userInput) => {
-        // Hier kannst du die Logik für die Antwortgenerierung implementieren
-        // Beispiel: Einfache Umkehrung der Benutzereingabe
-        return userInput.split('').reverse().join('');
-    };
+
+    function handleUserInput() {
+        const request = {userInput: userInput};
+            ChatbotService.analyzePost(request)
+                .then((response) => {
+                    setMessages((prevMessages) => [
+                        ...prevMessages,
+                        { role: 'user', content: userInput },
+                        { role: 'bot', content: response },
+                    ]);
+
+                    // Leere die Benutzereingabe
+                    setUserInput('');
+                })
+                .catch((error) => {
+                    setShowError(true);
+                    setError(error);
+                });
+    }
 
     const renderAvatar = (role) => {
         if (role === 'user') {

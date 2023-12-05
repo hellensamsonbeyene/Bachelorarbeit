@@ -1,5 +1,6 @@
 package com.chatbot.springbootchatbot.controller;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -8,18 +9,24 @@ import org.springframework.web.bind.annotation.RestController;
 public class ChatbotController {
 
     @PostMapping("/analyze")
-    public String analyzeText(@RequestBody String userInput) {
+    public String analyzeText(@RequestBody UserInputMessage userInputMessage) {
+        String userInput = userInputMessage.userInput();
         // Führen Sie OpenNLP und NER auf userInput durch
         // Implementieren Sie Ihre Logik hier
-        String nerResult = yourNERLogic(userInput);
-        System.out.println(nerResult);
         // Senden Sie das Ergebnis zurück an den Client
-        return nerResult;
+        return yourNERLogic(userInput);
     }
 
-    // Implementieren Sie Ihre OpenNLP/NER-Logik hier
     private String yourNERLogic(String userInput) {
         // Fügen Sie Ihre OpenNLP/NER-Logik hier ein
-        return "NER result for: " + userInput;
+        return new StringBuilder(userInput).reverse().toString();
     }
+     public record UserInputMessage(String userInput) {
+
+        @Override
+        @JsonProperty("userInput")
+            public String userInput() {
+                return userInput;
+            }
+        }
 }
