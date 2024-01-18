@@ -9,6 +9,7 @@ import FileDropArea from "../FileDropArea";
 import PersonIcon from '@mui/icons-material/Person';
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import ChatbotService from "../../services/ChatbotService";
+import {Message} from "../../models/Message";
 
 
 const theme = {
@@ -29,18 +30,13 @@ const CustomChatbot = () => {
     const [showError, setShowError] = useState(false);
     const [error, setError] = useState("");
 
-
     useEffect(() => {
         // Scrollt automatisch nach unten, wenn neue Nachrichten hinzugefügt werden
         messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
-
-
-
-
     function handleUserInput() {
-        const request = {userInput: userInput};
+        const request: Message = {userInput: userInput};
             ChatbotService.analyzePost(request)
                 .then((response) => {
                     setMessages((prevMessages) => [
