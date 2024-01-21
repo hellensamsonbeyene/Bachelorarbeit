@@ -1,0 +1,4 @@
+John Doe    PERSON
+MyCompany   ORGANIZATION
+Berlin      LOCATION
+ProductX    PRODUCT

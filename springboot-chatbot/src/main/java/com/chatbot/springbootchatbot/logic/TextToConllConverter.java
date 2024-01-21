@@ -14,7 +14,7 @@ public class TextToConllConverter {
     public static void main(String[] args) {
         // Erstellen Sie eine Eigenschaftenklasse für die Konfiguration
         Properties props = new Properties();
-        props.setProperty("annotators", "tokenize,ssplit,pos,ner");
+        props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner");
 
         // Erstellen Sie eine CoreNLP-Pipeline
         StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
