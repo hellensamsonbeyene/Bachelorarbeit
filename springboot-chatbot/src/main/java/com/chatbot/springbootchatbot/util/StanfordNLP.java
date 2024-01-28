@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class OpenNLP {
+public class StanfordNLP {
 
     private static Map<String, NameFinderME> entityFinders;
 
@@ -25,7 +25,7 @@ public class OpenNLP {
             e.printStackTrace();
         }
     }
-    public OpenNLP() throws IOException {
+    public StanfordNLP() throws IOException {
         entityFinders = loadEntityFinders();
     }
 
@@ -56,7 +56,7 @@ public class OpenNLP {
         return finders;
     }
     private static NameFinderME createNameFinder(String modelPath) throws IOException {
-        try (InputStream modelIn = OpenNLP.class.getClassLoader().getResourceAsStream(modelPath)) {
+        try (InputStream modelIn = StanfordNLP.class.getClassLoader().getResourceAsStream(modelPath)) {
             assert modelIn != null;
             TokenNameFinderModel model = new TokenNameFinderModel(modelIn);
             return new NameFinderME(model);

@@ -16,7 +16,7 @@ public class CorsConfig {
 
         // Erlaube Anfragen nur von bestimmten Ursprüngen
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost:3001");
+        config.addAllowedOrigin("http://localhost:3000");
 
         // Erlaube nur POST-Anfragen
         config.addAllowedMethod("*");
