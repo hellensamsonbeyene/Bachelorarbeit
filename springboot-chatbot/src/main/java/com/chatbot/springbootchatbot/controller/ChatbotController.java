@@ -13,7 +13,7 @@ public class ChatbotController {
     public String analyzeText(@RequestBody UserInputMessage userInputMessage) {
         String userInput = userInputMessage.userInput();
 
-        return AnalyzeTextFromChatbot.tokenizeUserInput(userInput);
+        return AnalyzeTextFromChatbot.analyzeUserInput(userInput);
 
     }
 

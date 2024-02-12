@@ -1,4 +1,23 @@
-John Doe    PERSON
-MyCompany   ORGANIZATION
-Berlin      LOCATION
-ProductX    PRODUCT
+#Entitäten
+
+Max
+Berlin
+Deutsche Bank
+Laptop
+Reisebuchung
+Chemie
+Aktien
+Gemälde
+Künstliche Intelligenz
+Fußball
+Pizza
+Kaffee
+Auto
+Herzinfarkt
+Klavierkonzert
+Renaissance
+
+
+
+
+

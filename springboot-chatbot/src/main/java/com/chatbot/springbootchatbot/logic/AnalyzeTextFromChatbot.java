@@ -8,10 +8,14 @@ import opennlp.tools.tokenize.TokenizerModel;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class AnalyzeTextFromChatbot {
     static Tokenizer tokenizer;
+    static List<String> customEntities = Arrays.asList("word1", "word2", "word3"); // Add your predetermined words here
+
 
     static {
         // Load the tokenizer model
@@ -23,8 +27,17 @@ public class AnalyzeTextFromChatbot {
         }
     }
 
-    public static String tokenizeUserInput(String text) {
-            System.out.println(Arrays.toString(tokenizer.tokenize(text)));
-            return  Arrays.toString(tokenizer.tokenize(text));
+    public static String analyzeUserInput(String userInput) {
+        String[] tokens = tokenizer.tokenize(userInput);
+        System.out.println(Arrays.toString(tokens));
+        List<String> recognizedWords = new ArrayList<>();
+
+        for (String token : tokens) {
+            if (customEntities.contains(token)) {
+                recognizedWords.add(token);
+            }
         }
+
+        return "Erkannte Entitäten:"+ String.join(", ", recognizedWords);
     }
+}
