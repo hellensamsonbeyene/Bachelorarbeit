@@ -1,6 +1,5 @@
 package com.chatbot.springbootchatbot.logic;
 
-
 import opennlp.tools.tokenize.Tokenizer;
 import opennlp.tools.tokenize.TokenizerME;
 import opennlp.tools.tokenize.TokenizerModel;
@@ -14,8 +13,6 @@ import java.util.List;
 
 public class AnalyzeTextFromChatbot {
     static Tokenizer tokenizer;
-    static List<String> customEntities = Arrays.asList("word1", "word2", "word3"); // Add your predetermined words here
-
 
     static {
         // Load the tokenizer model
@@ -23,11 +20,12 @@ public class AnalyzeTextFromChatbot {
             TokenizerModel model = new TokenizerModel(modelIn);
             tokenizer = new TokenizerME(model);
         } catch (IOException e) {
-            throw new RuntimeException("Error initializing tokenizer", e);
+            throw new RuntimeException("Fehler beim Initialisieren des Tokenizers", e);
         }
     }
 
     public static String analyzeUserInput(String userInput) {
+        List<String> customEntities = CustomEntitiesLoader.getCustomEntities();
         String[] tokens = tokenizer.tokenize(userInput);
         System.out.println(Arrays.toString(tokens));
         List<String> recognizedWords = new ArrayList<>();
@@ -38,6 +36,6 @@ public class AnalyzeTextFromChatbot {
             }
         }
 
-        return "Erkannte Entitäten:"+ String.join(", ", recognizedWords);
+        return "Erkannte Entitäten:" + String.join(", ", recognizedWords);
     }
 }

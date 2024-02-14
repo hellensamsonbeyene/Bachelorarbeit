@@ -12,6 +12,7 @@ import ChatbotService from "../../services/ChatbotService";
 import {Message} from "../../models/Message";
 
 
+
 const theme = {
     background: '#f5f8fb',
     fontFamily: 'Arial, sans-serif',
@@ -23,12 +24,12 @@ const theme = {
     userBubbleColor: '#fff',
     userFontColor: '#4a4a4a',
 };
-const CustomChatbot = () => {
+const CustomChatbot = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
     const [userInput, setUserInput] = useState('');
     const [messages, setMessages] = useState([]);
     const messagesEndRef = useRef(null);
-    const [showError, setShowError] = useState(false);
-    const [error, setError] = useState("");
+
+
 
     useEffect(() => {
         // Scrollt automatisch nach unten, wenn neue Nachrichten hinzugefügt werden
@@ -49,8 +50,9 @@ const CustomChatbot = () => {
                     setUserInput('');
                 })
                 .catch((error) => {
-                    setShowError(true);
-                    setError(error);
+                    setShowPopUp(true);
+                    setColorPopUp("error");
+                    setPopUpMessage(error.response.data);
                 });
     }
 
@@ -73,7 +75,7 @@ const CustomChatbot = () => {
                     alignItems="center"
                 >
                     <Grid item>
-                        <FileDropArea/>
+                        <FileDropArea setShowPopUp={setShowPopUp} setPopUpMessage={setPopUpMessage} setColorPopUp={setColorPopUp}/>
                     </Grid>
                     <Grid item>
                         <div style={{ width: '600px', margin: 'auto', padding: '20px', borderRadius: '10px', boxShadow: '0 0 10px rgba(0,0,0,0.1)', backgroundColor: '#008587'}}>
@@ -128,6 +130,7 @@ const CustomChatbot = () => {
                         </div>
                     </Grid>
                 </Grid>
+
             </ThemeProvider>
         </div>
     );

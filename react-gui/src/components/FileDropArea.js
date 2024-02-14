@@ -1,16 +1,15 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
+import ChatbotService from "../services/ChatbotService";
 
 
-const FileDropArea = () => {
-    const [successMessage, setSuccessMessage] = useState(null);
+const FileDropArea = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
     const fileInputRef = useRef(null);
+
 
     const handleDrop = (event) => {
         event.preventDefault();
-
         const file = event.dataTransfer.files[0];
-
         if (file) {
             handleFile(file);
         }
@@ -18,7 +17,6 @@ const FileDropArea = () => {
 
     const handleFileInput = (event) => {
         const file = event.target.files[0];
-
         if (file) {
             handleFile(file);
         }
@@ -34,17 +32,30 @@ const FileDropArea = () => {
                     fileContent: content,
                 };
 
-                // Log the JSON content to the console
-                console.log('File Content (as JSON):', JSON.stringify(jsonContent, null, 2));
+                // Use FormData to handle file upload
+                const formData = new FormData();
+                formData.append('file', file);
 
-                // Set the success message
-                setSuccessMessage('Datei erfolgreich hochgeladen!');
+                ChatbotService.uploadFile(formData)
+                    .then(() => {
+                        setShowPopUp(true);
+                        setColorPopUp("success");
+                        setPopUpMessage("Datei erfolgreich hochgeladen!");
+                        console.log('Dateiinhalt (als JSON):', JSON.stringify(jsonContent, null, 2));
+                    })
+                    .catch((error) => {
+                        setShowPopUp(true);
+                        setColorPopUp("error");
+                        console.log('Error',error)
+                        setPopUpMessage(error.response.data);
+                    });
             };
 
             reader.readAsText(file);
         } else {
-            setSuccessMessage(null);
-            console.error('Invalides Dateiformat. Bitte laden Sie eine .txt Datei hoch.');
+            setShowPopUp(true);
+            setColorPopUp("error");
+            setPopUpMessage("Invalides Dateiformat. Bitte laden Sie eine .txt Datei hoch.");
         }
     };
 

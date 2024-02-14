@@ -1,9 +1,12 @@
 // react
-import React from "react";
+import React, {useState} from "react";
 
 import {ThemeProvider, createTheme} from '@mui/material/styles';
 import NavigationBar from "../../NavigationBar/NavigationBar";
 import CustomChatbot from "../../components/EditChatbot/CustomChatbot";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from '@mui/material/Alert';
+
 //custom
 
 
@@ -17,6 +20,9 @@ const MainPage = () => {
 
       // eslint-disable-next-line
     const [getColorPalette, setColorPalette] = React.useState(palette);
+    const [showPopUp, setShowPopUp] = useState(false);
+    const [popUpMessage, setPopUpMessage] = useState("");
+    const [colorPopUp, setColorPopUp] = useState("");
 
     // Theme for ThemeProvider Component
     let theme = createTheme({
@@ -44,7 +50,23 @@ const MainPage = () => {
             <ThemeProvider theme={theme}>
                 <NavigationBar/>
             </ThemeProvider>
-            <CustomChatbot/>
+            <CustomChatbot setShowPopUp={setShowPopUp} setPopUpMessage={setPopUpMessage} setColorPopUp={setColorPopUp} />
+            <Snackbar
+                open={showPopUp}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                }}
+            >
+                <Alert
+                    severity={colorPopUp} // Make sure colorPopUp is "success"
+                    variant="filled"
+                    sx={{ width: '100%' }}
+                    onClose={() => {setShowPopUp(false)}}
+                >
+                    {popUpMessage}
+                </Alert>
+            </Snackbar>
         </>
     );
 

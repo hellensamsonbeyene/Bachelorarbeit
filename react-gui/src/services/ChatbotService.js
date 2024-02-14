@@ -8,8 +8,19 @@ function analyzePost(userInput: string) {
     });
 }
 
+function uploadFile(file) {
+    return request({
+        url: "/uploadFile",
+        method: "POST",
+        data: file,
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+}
 const ChatbotService = {
     analyzePost,
+    uploadFile
 };
 
 
