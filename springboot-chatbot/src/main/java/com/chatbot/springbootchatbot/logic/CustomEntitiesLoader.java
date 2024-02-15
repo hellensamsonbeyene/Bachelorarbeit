@@ -39,11 +39,11 @@ public class CustomEntitiesLoader {
     public static ResponseEntity<String> uploadFile(MultipartFile file) {
         try {
             customEntities = loadCustomEntities(filePath);
+            saveFile(filePath, file);
 
             if (customEntities.isEmpty()) {
                 return new ResponseEntity<>("Die Datei ist leer oder die Datei existiert nicht.", HttpStatus.INTERNAL_SERVER_ERROR);
             } else {
-                saveFile(filePath, file);
                 for (String entity : customEntities) {
                     System.out.println("Benutzerdefinierte Entität: " + entity);
                     return new ResponseEntity<>("Datei erfolgreich hochgeladen.", HttpStatus.OK);
