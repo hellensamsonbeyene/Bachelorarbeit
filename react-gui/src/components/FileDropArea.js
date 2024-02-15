@@ -1,10 +1,11 @@
-import React, { useRef } from 'react';
+import React, {useRef, useState} from 'react';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import ChatbotService from "../services/ChatbotService";
 
 
 const FileDropArea = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
     const fileInputRef = useRef(null);
+    const [lastFileName, setLastFileName] = useState(null);
 
 
     const handleDrop = (event) => {
@@ -23,6 +24,7 @@ const FileDropArea = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
     };
 
     const handleFile = (file) => {
+        setLastFileName(file.name); // Set lastFileName when a file is added
         if (file.type === 'text/plain') {
             const reader = new FileReader();
 
@@ -82,7 +84,9 @@ const FileDropArea = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
             onDragOver={handleDragOver}
             onClick={handleClick}
         >
-            Ziehen Sie hier die .txt Datei rein <br/><br/> oder <br/><br/>Klicken Sie hier, um eine Datei hochzuladen. <br/><br/> <UploadFileIcon fontSize="large"/>
+            Ziehen Sie hier die .txt Datei rein <br/><br/> oder <br/><br/>Klicken Sie hier, um eine Datei hochzuladen. <br/><br/>
+            {lastFileName && <div>Zuletzt hinzugefügte Datei: {lastFileName}</div>}
+            <UploadFileIcon fontSize="large"/>
             <input
                 type="file"
                 accept=".txt"

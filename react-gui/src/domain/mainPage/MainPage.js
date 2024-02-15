@@ -57,12 +57,13 @@ const MainPage = () => {
                     vertical: 'bottom',
                     horizontal: 'left',
                 }}
+                autoHideDuration={3000} // 3000 milliseconds (3 seconds)
+                onClose={() => {setShowPopUp(false)}}
             >
                 <Alert
                     severity={colorPopUp} // Make sure colorPopUp is "success"
                     variant="filled"
                     sx={{ width: '100%' }}
-                    onClose={() => {setShowPopUp(false)}}
                 >
                     {popUpMessage}
                 </Alert>
