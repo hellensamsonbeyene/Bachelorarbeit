@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class AnalyzeTextFromChatbot {
     static Tokenizer tokenizer;
@@ -25,17 +26,24 @@ public class AnalyzeTextFromChatbot {
     }
 
     public static String analyzeUserInput(String userInput) {
-        List<String> customEntities = CustomEntitiesLoader.getCustomEntities();
+        Map<String, String> customEntities = CustomEntitiesLoader.getCustomEntities();
         String[] tokens = tokenizer.tokenize(userInput);
         System.out.println(Arrays.toString(tokens));
-        List<String> recognizedWords = new ArrayList<>();
+        List<String> recognizedSentences = new ArrayList<>();
 
         for (String token : tokens) {
-            if (customEntities.contains(token)) {
-                recognizedWords.add(token);
+            if (customEntities.containsKey(token)) {
+                String sentence = customEntities.get(token);
+                recognizedSentences.add(sentence);
             }
         }
 
-        return "Erkannte Entitäten:" + String.join(", ", recognizedWords);
+        if (!recognizedSentences.isEmpty()) {
+            return String.join(", ", recognizedSentences);
+        } else {
+            return CustomEntitiesLoader.getStandardMessage();
+        }
     }
+
+
 }

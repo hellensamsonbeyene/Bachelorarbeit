@@ -1,4 +1,8 @@
+#Standardnachricht
+Das habe ich leider nicht verstanden,Sorry.
+
 #Entitäten
 
-Test
-Hallo
+Hi : Das ist ein Satz
+Test : Noch einer
+Welten : Hihi

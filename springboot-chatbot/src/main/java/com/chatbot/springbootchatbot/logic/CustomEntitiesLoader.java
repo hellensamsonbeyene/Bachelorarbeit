@@ -9,54 +9,63 @@ import javax.annotation.PostConstruct;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class CustomEntitiesLoader {
 
     private static final String filePath = "springboot-chatbot/src/main/resources/custom-entities.txt";
-    private static List<String> customEntities;
+    private static Map<String, String> customEntities;
+    private static String standardMessage;
 
-    public static List<String> getCustomEntities() {
+    public static Map<String, String> getCustomEntities() {
         return customEntities;
+    }
+
+    public static String getStandardMessage() {
+        return standardMessage;
     }
 
     @PostConstruct
     public ResponseEntity<String> init() {
         customEntities = loadCustomEntities(filePath);
-        // Print or use customEntities as needed
+        standardMessage = loadStandardMessage(filePath);
+
         if (customEntities.isEmpty()) {
             return new ResponseEntity<>("Die Liste der benutzerdefinierten Entitäten ist leer oder die Datei existiert nicht.", HttpStatus.INTERNAL_SERVER_ERROR);
         } else {
-            for (String entity : customEntities) {
-                System.out.println("Benutzerdefinierte Entität: " + entity);
+            for (Map.Entry<String, String> entry : customEntities.entrySet()) {
+                System.out.println("Benutzerdefinierte Entität: " + entry.getKey() + ", Satz: " + entry.getValue());
             }
         }
-        return null;
+
+        // Adjust the return statement based on your requirements
+        return new ResponseEntity<>("Erfolgreich initialisiert.", HttpStatus.OK);
     }
 
     public static ResponseEntity<String> uploadFile(MultipartFile file) {
         try {
+            // Reload custom entities after saving the file
             customEntities = loadCustomEntities(filePath);
             saveFile(filePath, file);
 
             if (customEntities.isEmpty()) {
                 return new ResponseEntity<>("Die Datei ist leer oder die Datei existiert nicht.", HttpStatus.INTERNAL_SERVER_ERROR);
             } else {
-                for (String entity : customEntities) {
-                    System.out.println("Benutzerdefinierte Entität: " + entity);
-                    return new ResponseEntity<>("Datei erfolgreich hochgeladen.", HttpStatus.OK);
-
+                // Print each custom entity and its corresponding sentence
+                for (Map.Entry<String, String> entry : customEntities.entrySet()) {
+                    System.out.println("Benutzerdefinierte Entität: " + entry.getKey() + ", Satz: " + entry.getValue());
                 }
+
+                // Adjust the return statement based on your requirements
+                return new ResponseEntity<>("Datei erfolgreich hochgeladen.", HttpStatus.OK);
             }
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Fehler beim Hochladen der Datei: " + e.getMessage());
             return new ResponseEntity<>("Fehler beim Hochladen der Datei: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return null;
     }
-
 
     public static void saveFile(String filePath, MultipartFile file) throws IOException {
         // Use Paths.get to create a Path object from the specified file path
@@ -78,31 +87,63 @@ public class CustomEntitiesLoader {
             throw new IOException("Fehler beim Speichern der Datei: " + e.getMessage());
         }
     }
+    public static String loadStandardMessage(String filePath) {
+        String standardMessage = "";
 
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            boolean standardMessageSection = false;
 
-    public static List<String> loadCustomEntities(String filePath) {
-        customEntities = new ArrayList<>();
+            while ((line = reader.readLine()) != null) {
+                // Check if we are in the "#Standardnachricht" section
+                if (line.trim().equals("#Standardnachricht")) {
+                    standardMessageSection = true;
+                    continue;
+                }
+
+                // If we are in the standard message section, save the message
+                if (standardMessageSection && !line.trim().isEmpty()) {
+                    standardMessage = line.trim();
+                    break;  // Exit the loop after finding the standard message
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Fehler beim Laden der Standardnachricht aus der Datei: " + filePath + ". Details: " + e.getMessage());
+        }
+
+        return standardMessage;
+    }
+    public static Map<String, String> loadCustomEntities(String filePath) {
+        Map<String, String> customEntitiesMap = new HashMap<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             boolean entitiesSection = false;
+            String currentEntity;
 
             while ((line = reader.readLine()) != null) {
-                // Check if we are in the "#Entitäten" section
+                // Überprüfen, ob wir im Abschnitt "#Entitäten" sind
                 if (line.trim().equals("#Entitäten")) {
                     entitiesSection = true;
                     continue;
                 }
 
-                // If we are in the entities section, add the word to the list
+                // Wenn wir uns im Entitäten-Abschnitt befinden, Entitäten und Sätze analysieren
                 if (entitiesSection && !line.trim().isEmpty()) {
-                    customEntities.add(line.trim());
+                    String[] parts = line.split(":", 2); // Am ersten Doppelpunkt aufteilen
+                    if (parts.length == 2) {
+                        currentEntity = parts[0].trim();
+                        String satz = parts[1].trim();
+                        customEntitiesMap.put(currentEntity, satz);
+                    }
                 }
             }
         } catch (IOException e) {
             System.err.println("Fehler beim Laden benutzerdefinierter Entitäten aus der Datei: " + filePath + ". Details: " + e.getMessage());
         }
 
-        return customEntities;
+        return customEntitiesMap;
     }
+
+
 }
