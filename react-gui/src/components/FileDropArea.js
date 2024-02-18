@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, { useRef,useState } from 'react';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import ChatbotService from "../services/ChatbotService";
 
@@ -38,8 +38,11 @@ const FileDropArea = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
                 const formData = new FormData();
                 formData.append('file', file);
 
+                // Verwende die FormData für den Upload
                 ChatbotService.uploadFile(formData)
                     .then(() => {
+                        // Revokes the object URL, freeing up resources
+                        URL.revokeObjectURL(file.preview);
                         setShowPopUp(true);
                         setColorPopUp("success");
                         setPopUpMessage("Datei erfolgreich hochgeladen!");
@@ -48,10 +51,13 @@ const FileDropArea = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
                     .catch((error) => {
                         setShowPopUp(true);
                         setColorPopUp("error");
-                        console.log('Error',error)
+                        console.log('Error', error);
                         setPopUpMessage(error.response.data);
                     });
             };
+
+            // Erstelle einen temporären Objekt-URL für die Vorschau
+            file.preview = URL.createObjectURL(file);
 
             reader.readAsText(file);
         } else {
@@ -65,8 +71,10 @@ const FileDropArea = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
         event.preventDefault();
     };
 
-    const handleClick = () => {
+    const handleClick = (event) => {
         // Trigger file input click
+        const { target = {} } = event || {};
+        target.value = "";
         fileInputRef.current.click();
     };
 
@@ -98,5 +106,4 @@ const FileDropArea = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
     );
 };
 
-
-export default FileDropArea
+export default FileDropArea;

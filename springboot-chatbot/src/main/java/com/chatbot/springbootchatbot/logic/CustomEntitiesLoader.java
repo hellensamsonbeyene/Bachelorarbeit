@@ -32,8 +32,8 @@ public class CustomEntitiesLoader {
         customEntities = loadCustomEntities(filePath);
         standardMessage = loadStandardMessage(filePath);
 
-        if (customEntities.isEmpty()) {
-            return new ResponseEntity<>("Die Liste der benutzerdefinierten Entitäten ist leer oder die Datei existiert nicht.", HttpStatus.INTERNAL_SERVER_ERROR);
+        if (customEntities.isEmpty() || standardMessage.isEmpty()) {
+            return new ResponseEntity<>("Die Liste der benutzerdefinierten Entitäten oder die Standardnachricht ist leer oder die Datei existiert nicht.", HttpStatus.INTERNAL_SERVER_ERROR);
         } else {
             for (Map.Entry<String, String> entry : customEntities.entrySet()) {
                 System.out.println("Benutzerdefinierte Entität: " + entry.getKey() + ", Satz: " + entry.getValue());
@@ -46,9 +46,11 @@ public class CustomEntitiesLoader {
 
     public static ResponseEntity<String> uploadFile(MultipartFile file) {
         try {
+            saveFile(filePath, file);
+
             // Reload custom entities after saving the file
             customEntities = loadCustomEntities(filePath);
-            saveFile(filePath, file);
+            standardMessage = loadStandardMessage(filePath);
 
             if (customEntities.isEmpty()) {
                 return new ResponseEntity<>("Die Datei ist leer oder die Datei existiert nicht.", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -88,7 +90,7 @@ public class CustomEntitiesLoader {
         }
     }
     public static String loadStandardMessage(String filePath) {
-        String standardMessage = "";
+        standardMessage = "";
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
@@ -114,7 +116,7 @@ public class CustomEntitiesLoader {
         return standardMessage;
     }
     public static Map<String, String> loadCustomEntities(String filePath) {
-        Map<String, String> customEntitiesMap = new HashMap<>();
+        customEntities = new HashMap<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
@@ -134,7 +136,7 @@ public class CustomEntitiesLoader {
                     if (parts.length == 2) {
                         currentEntity = parts[0].trim();
                         String satz = parts[1].trim();
-                        customEntitiesMap.put(currentEntity, satz);
+                        customEntities.put(currentEntity, satz);
                     }
                 }
             }
@@ -142,7 +144,7 @@ public class CustomEntitiesLoader {
             System.err.println("Fehler beim Laden benutzerdefinierter Entitäten aus der Datei: " + filePath + ". Details: " + e.getMessage());
         }
 
-        return customEntitiesMap;
+        return customEntities;
     }
 
 
