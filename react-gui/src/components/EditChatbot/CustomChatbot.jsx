@@ -30,13 +30,10 @@ const CustomChatbot = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
     const handleInputChange = (e) => {
         const inputText = e.target.value;
         setUserInput(inputText);
-
-        // Aktualisieren Sie die Zeichenanzahl
         setCharCount(inputText.length);
     };
 
     useEffect(() => {
-        // Scrollt automatisch nach unten, wenn neue Nachrichten hinzugefügt werden
         messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
@@ -54,7 +51,6 @@ const CustomChatbot = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
                         {role: 'user', content: userInput},
                         {role: 'bot', content: response},
                     ]);
-                    // Leere die Benutzereingabe
                     setCharCount(0);
                     setUserInput('');
                 })

@@ -12,7 +12,6 @@ import AOT_logo from "../assets/images/aot_logo.png"
 
 
 
-//custom
 const NavigationBar = () => {
     return (
         <React.Fragment>

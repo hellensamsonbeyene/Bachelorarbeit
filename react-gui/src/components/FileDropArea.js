@@ -34,14 +34,11 @@ const FileDropArea = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
                     fileContent: content,
                 };
 
-                // Use FormData to handle file upload
                 const formData = new FormData();
                 formData.append('file', file);
 
-                // Verwende die FormData für den Upload
                 ChatbotService.uploadFile(formData)
                     .then(() => {
-                        // Revokes the object URL, freeing up resources
                         URL.revokeObjectURL(file.preview);
                         setShowPopUp(true);
                         setColorPopUp("success");
@@ -55,8 +52,6 @@ const FileDropArea = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
                         setPopUpMessage(error.response.data);
                     });
             };
-
-            // Erstelle einen temporären Objekt-URL für die Vorschau
             file.preview = URL.createObjectURL(file);
 
             reader.readAsText(file);
@@ -72,7 +67,6 @@ const FileDropArea = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
     };
 
     const handleClick = (event) => {
-        // Trigger file input click
         const { target = {} } = event || {};
         target.value = "";
         fileInputRef.current.click();

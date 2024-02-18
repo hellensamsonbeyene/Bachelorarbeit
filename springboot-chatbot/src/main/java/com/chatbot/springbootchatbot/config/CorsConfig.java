@@ -14,14 +14,11 @@ public class CorsConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
 
-        // Erlaube Anfragen nur von bestimmten Ursprüngen
         config.setAllowCredentials(true);
         config.addAllowedOrigin("http://localhost:3000");
 
-        // Erlaube nur POST-Anfragen
         config.addAllowedMethod("*");
 
-        // Erlaube nur die spezifischen Pfade /analyze und /import
         config.addAllowedHeader("*");
 
         source.registerCorsConfiguration("/**", config);

@@ -39,28 +39,22 @@ public class CustomEntitiesLoader {
                 System.out.println("Benutzerdefinierte Entität: " + entry.getKey() + ", Satz: " + entry.getValue());
             }
         }
-
-        // Adjust the return statement based on your requirements
         return new ResponseEntity<>("Erfolgreich initialisiert.", HttpStatus.OK);
     }
 
     public static ResponseEntity<String> uploadFile(MultipartFile file) {
         try {
             saveFile(filePath, file);
-
-            // Reload custom entities after saving the file
             customEntities = loadCustomEntities(filePath);
             standardMessage = loadStandardMessage(filePath);
 
             if (customEntities.isEmpty()) {
                 return new ResponseEntity<>("Die Datei ist leer oder die Datei existiert nicht.", HttpStatus.INTERNAL_SERVER_ERROR);
             } else {
-                // Print each custom entity and its corresponding sentence
                 for (Map.Entry<String, String> entry : customEntities.entrySet()) {
                     System.out.println("Benutzerdefinierte Entität: " + entry.getKey() + ", Satz: " + entry.getValue());
                 }
 
-                // Adjust the return statement based on your requirements
                 return new ResponseEntity<>("Datei erfolgreich hochgeladen.", HttpStatus.OK);
             }
         } catch (IOException e) {
@@ -70,14 +64,11 @@ public class CustomEntitiesLoader {
     }
 
     public static void saveFile(String filePath, MultipartFile file) throws IOException {
-        // Use Paths.get to create a Path object from the specified file path
         Path path = Paths.get(filePath);
 
-        // Use try-with-resources to automatically close InputStream
         try (InputStream inputStream = file.getInputStream();
              FileOutputStream outputStream = new FileOutputStream(path.toFile())) {
 
-            // Copy the contents of the uploaded file to the specified path
             byte[] buffer = new byte[1024];
             int bytesRead;
             while ((bytesRead = inputStream.read(buffer)) != -1) {
@@ -97,16 +88,14 @@ public class CustomEntitiesLoader {
             boolean standardMessageSection = false;
 
             while ((line = reader.readLine()) != null) {
-                // Check if we are in the "#Standardnachricht" section
                 if (line.trim().equals("#Standardnachricht")) {
                     standardMessageSection = true;
                     continue;
                 }
 
-                // If we are in the standard message section, save the message
                 if (standardMessageSection && !line.trim().isEmpty()) {
                     standardMessage = line.trim();
-                    break;  // Exit the loop after finding the standard message
+                    break;
                 }
             }
         } catch (IOException e) {
@@ -124,17 +113,15 @@ public class CustomEntitiesLoader {
             String currentEntity;
 
             while ((line = reader.readLine()) != null) {
-                // Überprüfen, ob wir im Abschnitt "#Entitäten" sind
                 if (line.trim().equals("#Entitäten")) {
                     entitiesSection = true;
                     continue;
                 }
 
-                // Wenn wir uns im Entitäten-Abschnitt befinden, Entitäten und Sätze analysieren
                 if (entitiesSection && !line.trim().isEmpty()) {
-                    String[] parts = line.split(":", 2); // Am ersten Doppelpunkt aufteilen
+                    String[] parts = line.split(":", 2);
                     if (parts.length == 2) {
-                        currentEntity = parts[0].trim().toLowerCase(); // Normalisiere den Entitätsnamen in Kleinbuchstaben
+                        currentEntity = parts[0].trim().toLowerCase();
                         String satz = parts[1].trim();
                         customEntities.put(currentEntity, satz);
                         System.out.println("Entity"+currentEntity+"key"+satz);
