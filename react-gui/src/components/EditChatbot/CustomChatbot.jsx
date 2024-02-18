@@ -14,22 +14,26 @@ import {Message} from "../../models/Message";
 
 
 const theme = {
-    background: '#f5f8fb',
     fontFamily: 'Arial, sans-serif',
-    headerBgColor: '#008587', // Change this to your desired header background color
-    headerFontColor: '#fff',
+    primary: '#008587', // Change this to your desired header background color
     headerFontSize: '15px',
-    botBubbleColor: '#008587', // Change this to your desired bot bubble color
-    botFontColor: '#fff',
-    userBubbleColor: '#fff',
-    userFontColor: '#4a4a4a',
+    white: '#fff',
+    secondary: '#4a4a4a',
 };
 const CustomChatbot = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
     const [userInput, setUserInput] = useState('');
     const [messages, setMessages] = useState([]);
     const messagesEndRef = useRef(null);
+    const [charCount, setCharCount] = useState(0);
+    const maxChars = 500;
 
+    const handleInputChange = (e) => {
+        const inputText = e.target.value;
+        setUserInput(inputText);
 
+        // Aktualisieren Sie die Zeichenanzahl
+        setCharCount(inputText.length);
+    };
 
     useEffect(() => {
         // Scrollt automatisch nach unten, wenn neue Nachrichten hinzugefügt werden
@@ -37,16 +41,21 @@ const CustomChatbot = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
     }, [messages]);
 
     function handleUserInput() {
-        const request: Message = {userInput: userInput};
+        if (charCount >= maxChars){
+            setShowPopUp(true);
+            setColorPopUp("error");
+            setPopUpMessage("Zu viele Zeichen. Bitte kürzen Sie Ihre Nachricht.");
+        }else {
+            const request: Message = {userInput: userInput};
             ChatbotService.analyzePost(request)
                 .then((response) => {
                     setMessages((prevMessages) => [
                         ...prevMessages,
-                        { role: 'user', content: userInput },
-                        { role: 'bot', content: response },
+                        {role: 'user', content: userInput},
+                        {role: 'bot', content: response},
                     ]);
-
                     // Leere die Benutzereingabe
+                    setCharCount(0);
                     setUserInput('');
                 })
                 .catch((error) => {
@@ -54,6 +63,7 @@ const CustomChatbot = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
                     setColorPopUp("error");
                     setPopUpMessage(error.response.data);
                 });
+        }
     }
 
     const renderAvatar = (role) => {
@@ -78,7 +88,7 @@ const CustomChatbot = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
                         <FileDropArea setShowPopUp={setShowPopUp} setPopUpMessage={setPopUpMessage} setColorPopUp={setColorPopUp}/>
                     </Grid>
                     <Grid item>
-                        <div style={{ width: '600px', margin: 'auto', padding: '20px', borderRadius: '10px', boxShadow: '0 0 10px rgba(0,0,0,0.1)', backgroundColor: '#008587'}}>
+                        <div style={{ width: '600px', margin: 'auto', padding: '20px', borderRadius: '10px', boxShadow: '0 0 10px rgba(0,0,0,0.1)', backgroundColor: theme.primary}}>
                             <Typography variant="h5" gutterBottom style={{ textAlign: 'center', color:'#ffff' }}>
                                 Chatbot
                             </Typography>
@@ -115,15 +125,25 @@ const CustomChatbot = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
                                 <div ref={messagesEndRef} />
                             </div>
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <TextField
-                                    type="text"
-                                    placeholder="Schreibe eine Nachricht..."
-                                    value={userInput}
-                                    onChange={(e) => setUserInput(e.target.value)}
-                                    style={{ flex: 1, marginRight: '10px', backgroundColor: '#fff', color: '#008587' }}
-                                />
-                                <Button variant="contained" style={{ backgroundColor: '#fff', color: '#008587' }} onClick={handleUserInput}>
+                            <div style={{ display: 'flex', alignItems: 'start' }}>
+                                <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1}}>
+                                    <TextField
+                                        multiline={4}
+                                        type="text"
+                                        placeholder="Schreibe eine Nachricht..."
+                                        value={userInput}
+                                        onChange={handleInputChange}
+                                        style={{ width: '100%', marginBottom: '15px', backgroundColor: theme.white, color: theme.primary }}
+                                    />
+                                    <div style={{ fontSize: '18px', color: charCount > maxChars ? 'red' : theme.white }}>
+                                        {charCount}/{maxChars} Zeichen
+                                    </div>
+                                </div>
+                                <Button
+                                    variant="contained"
+                                    style={{ backgroundColor: theme.white, color: theme.primary, marginLeft: '10px' }}
+                                    onClick={handleUserInput}
+                                >
                                     Senden
                                 </Button>
                             </div>
