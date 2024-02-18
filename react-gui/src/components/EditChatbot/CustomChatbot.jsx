@@ -92,7 +92,7 @@ const CustomChatbot = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
                             <Typography variant="h5" gutterBottom style={{ textAlign: 'center', color:'#ffff' }}>
                                 Chatbot
                             </Typography>
-                            <div style={{ display: 'flex', flexDirection: 'column', height: '500px', overflowY: 'auto', marginBottom: '20px' ,backgroundColor: '#ffff'}}>
+                            <div style={{ display: 'flex', flexDirection: 'column', height: '500px', overflowY: 'auto', marginBottom: '20px' ,backgroundColor: '#ffff', flexWrap: 'wrap' }}>
                                 <div style={{padding:'10px',display: 'flex',flexDirection: 'column'}}>
                                 {messages.map((message, index) => (
                                     <div key={index} style={{ display: 'flex', alignSelf: message.role === 'user' ? 'flex-end' : 'flex-start', marginBottom: '10px', justifyContent: message.role === 'user' ? 'flex-end' : 'flex-start', // Diese Zeile wurde angepasst
@@ -104,12 +104,15 @@ const CustomChatbot = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
                                         )}
                                         <Paper
                                             style={{
-                                                wordWrap: 'break-word',
+                                                whiteSpace: 'pre-wrap',
                                                 padding: '10px',
                                                 borderRadius: '15px',
                                                 background: message.role === 'user' ? '#2196F3' : '#e0e0e0',
                                                 color: message.role === 'user' ? '#fff' : '#000',
                                                 maxWidth: '70%',
+                                                overflow: 'hidden',
+                                                wordBreak: 'break-word',  // Hinzugefügt
+                                                display: 'inline-block',  // Hinzugefügt
                                             }}
                                         >
                                             {message.content}

@@ -28,12 +28,14 @@ public class AnalyzeTextFromChatbot {
     public static String analyzeUserInput(String userInput) {
         Map<String, String> customEntities = CustomEntitiesLoader.getCustomEntities();
         String[] tokens = tokenizer.tokenize(userInput);
+
         System.out.println(Arrays.toString(tokens));
         List<String> recognizedSentences = new ArrayList<>();
 
         for (String token : tokens) {
-            if (customEntities.containsKey(token)) {
-                String sentence = customEntities.get(token);
+            String normalizedToken = token.toLowerCase();
+            if (customEntities.containsKey(normalizedToken)) {
+                String sentence = customEntities.get(normalizedToken);
                 recognizedSentences.add(sentence);
             }
         }

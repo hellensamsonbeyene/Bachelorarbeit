@@ -134,9 +134,10 @@ public class CustomEntitiesLoader {
                 if (entitiesSection && !line.trim().isEmpty()) {
                     String[] parts = line.split(":", 2); // Am ersten Doppelpunkt aufteilen
                     if (parts.length == 2) {
-                        currentEntity = parts[0].trim();
+                        currentEntity = parts[0].trim().toLowerCase(); // Normalisiere den Entitätsnamen in Kleinbuchstaben
                         String satz = parts[1].trim();
                         customEntities.put(currentEntity, satz);
+                        System.out.println("Entity"+currentEntity+"key"+satz);
                     }
                 }
             }
