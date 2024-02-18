@@ -111,8 +111,8 @@ const CustomChatbot = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
                                                 color: message.role === 'user' ? '#fff' : '#000',
                                                 maxWidth: '70%',
                                                 overflow: 'hidden',
-                                                wordBreak: 'break-word',  // Hinzugefügt
-                                                display: 'inline-block',  // Hinzugefügt
+                                                wordBreak: 'break-word',
+                                                display: 'inline-block',
                                             }}
                                         >
                                             {message.content}

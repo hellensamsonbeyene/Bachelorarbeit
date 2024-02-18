@@ -28,15 +28,18 @@ public class AnalyzeTextFromChatbot {
     public static String analyzeUserInput(String userInput) {
         Map<String, String> customEntities = CustomEntitiesLoader.getCustomEntities();
         String[] tokens = tokenizer.tokenize(userInput);
-
         System.out.println(Arrays.toString(tokens));
         List<String> recognizedSentences = new ArrayList<>();
 
         for (String token : tokens) {
-            String normalizedToken = token.toLowerCase();
-            if (customEntities.containsKey(normalizedToken)) {
-                String sentence = customEntities.get(normalizedToken);
-                recognizedSentences.add(sentence);
+            // Überprüfen, ob das Token Teil einer definierten Entität ist
+            for (Map.Entry<String, String> entry : customEntities.entrySet()) {
+                String entity = entry.getKey().toLowerCase();  // Normalisiere die Entitäten zu Kleinbuchstaben
+                if (token.toLowerCase().contains(entity)) {
+                    String sentence = entry.getValue();
+                    recognizedSentences.add(sentence);
+                    break;  // Wenn eine Übereinstimmung gefunden wurde, breche die Schleife ab
+                }
             }
         }
 
@@ -46,6 +49,7 @@ public class AnalyzeTextFromChatbot {
             return CustomEntitiesLoader.getStandardMessage();
         }
     }
+
 
 
 }
