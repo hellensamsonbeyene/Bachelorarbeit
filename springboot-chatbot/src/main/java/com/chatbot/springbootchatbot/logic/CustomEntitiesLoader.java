@@ -9,17 +9,21 @@ import javax.annotation.PostConstruct;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.AbstractMap;
 
+/**
+ * CustomEntitiesLoader ist für das Laden und Verwalten benutzerdefinierter Entitäten aus einer Textdatei verantwortlich
+ */
 @Component
 public class CustomEntitiesLoader {
-
     private static final String filePath = "springboot-chatbot/src/main/resources/custom-entities.txt";
-    private static Map<String, String> customEntities;
+    private static List<Map.Entry<String, String>> customEntities;
     private static String standardMessage;
 
-    public static Map<String, String> getCustomEntities() {
+    public static List<Map.Entry<String, String>> getCustomEntities() {
         return customEntities;
     }
 
@@ -27,6 +31,11 @@ public class CustomEntitiesLoader {
         return standardMessage;
     }
 
+    /**
+     * Initialisieren und Laden benutzerdefinierter Entitäten aus der Textdatei.
+     *
+     * @return ResponseEntity, das den Erfolg oder Misserfolg des Initialisierungsprozesses angibt.
+     */
     @PostConstruct
     public ResponseEntity<String> init() {
         customEntities = loadCustomEntities(filePath);
@@ -35,13 +44,19 @@ public class CustomEntitiesLoader {
         if (customEntities.isEmpty() || standardMessage.isEmpty()) {
             return new ResponseEntity<>("Die Liste der benutzerdefinierten Entitäten oder die Standardnachricht ist leer oder die Datei existiert nicht.", HttpStatus.INTERNAL_SERVER_ERROR);
         } else {
-            for (Map.Entry<String, String> entry : customEntities.entrySet()) {
+            for (Map.Entry<String, String> entry : customEntities) {
                 System.out.println("Benutzerdefinierte Entität: " + entry.getKey() + ", Satz: " + entry.getValue());
             }
         }
         return new ResponseEntity<>("Erfolgreich initialisiert.", HttpStatus.OK);
     }
 
+    /**
+     * Hochladen einer Datei, Speichern und erneuten Laden von benutzerdefinierten Entitäten und der Standardnachricht.
+     *
+     * @param file Die hochzuladende Datei.
+     * @return ResponseEntity
+     */
     public static ResponseEntity<String> uploadFile(MultipartFile file) {
         try {
             saveFile(filePath, file);
@@ -49,12 +64,11 @@ public class CustomEntitiesLoader {
             standardMessage = loadStandardMessage(filePath);
 
             if (customEntities.isEmpty()) {
-                return new ResponseEntity<>("Die Datei ist leer oder die Datei existiert nicht.", HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>("Die Datei ist leer oder existiert nicht.", HttpStatus.INTERNAL_SERVER_ERROR);
             } else {
-                for (Map.Entry<String, String> entry : customEntities.entrySet()) {
+                for (Map.Entry<String, String> entry : customEntities) {
                     System.out.println("Benutzerdefinierte Entität: " + entry.getKey() + ", Satz: " + entry.getValue());
                 }
-
                 return new ResponseEntity<>("Datei erfolgreich hochgeladen.", HttpStatus.OK);
             }
         } catch (IOException e) {
@@ -63,6 +77,13 @@ public class CustomEntitiesLoader {
         }
     }
 
+    /**
+     * Speichern einer Datei an einem bestimmten Pfad.
+     *
+     * @param filePath Der Pfad, an dem die Datei gespeichert werden soll.
+     * @param file     Die zu speichernde Datei.
+     * @throws IOException Falls ein Fehler beim Speichern der Datei auftritt.
+     */
     public static void saveFile(String filePath, MultipartFile file) throws IOException {
         Path path = Paths.get(filePath);
 
@@ -80,6 +101,13 @@ public class CustomEntitiesLoader {
             throw new IOException("Fehler beim Speichern der Datei: " + e.getMessage());
         }
     }
+
+    /**
+     * Laden der Standardnachricht aus der Textdatei.
+     *
+     * @param filePath Der Pfad zur Textdatei.
+     * @return Die geladene Standardnachricht.
+     */
     public static String loadStandardMessage(String filePath) {
         standardMessage = "";
 
@@ -104,13 +132,19 @@ public class CustomEntitiesLoader {
 
         return standardMessage;
     }
-    public static Map<String, String> loadCustomEntities(String filePath) {
-        customEntities = new HashMap<>();
+
+    /**
+     * Laden benutzerdefinierter Entitäten aus der Textdatei
+     *
+     * @param filePath Der Pfad zur Textdatei.
+     * @return Liste benutzerdefinierter Entitäten als Schlüssel-Wert-Paare.
+     */
+    public static List<Map.Entry<String, String>> loadCustomEntities(String filePath) {
+        List<Map.Entry<String, String>> customEntitiesList = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             boolean entitiesSection = false;
-            String currentEntity;
 
             while ((line = reader.readLine()) != null) {
                 if (line.trim().equals("#Entitäten")) {
@@ -121,10 +155,10 @@ public class CustomEntitiesLoader {
                 if (entitiesSection && !line.trim().isEmpty()) {
                     String[] parts = line.split(":", 2);
                     if (parts.length == 2) {
-                        currentEntity = parts[0].trim().toLowerCase();
-                        String satz = parts[1].trim();
-                        customEntities.put(currentEntity, satz);
-                        System.out.println("Entity"+currentEntity+"key"+satz);
+                        String currentEntity = parts[0].trim().toLowerCase();
+                        String sentence = parts[1].trim();
+                        customEntitiesList.add(new AbstractMap.SimpleEntry<>(currentEntity, sentence));
+                        System.out.println("Entität " + currentEntity + ", Satz: " + sentence);
                     }
                 }
             }
@@ -132,8 +166,6 @@ public class CustomEntitiesLoader {
             System.err.println("Fehler beim Laden benutzerdefinierter Entitäten aus der Datei: " + filePath + ". Details: " + e.getMessage());
         }
 
-        return customEntities;
+        return customEntitiesList;
     }
-
-
 }

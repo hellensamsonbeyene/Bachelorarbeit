@@ -7,12 +7,14 @@ import opennlp.tools.tokenize.TokenizerModel;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * AnalyzeTextFromChatbot ist verantwortlich für die Analyse von Benutzereingaben mithilfe von OpenNLP
+ */
 public class AnalyzeTextFromChatbot {
+
     static Tokenizer tokenizer;
 
     static {
@@ -24,30 +26,52 @@ public class AnalyzeTextFromChatbot {
         }
     }
 
+    /**
+     * Analysiert die Benutzereingabe und gibt den Satz der höchst priorisierten erkannten Entität zurück.
+     *
+     * @param userInput Die Eingabe des Benutzers, die analysiert werden soll.
+     * @return Der Satz der höchst priorisierten erkannten Entität oder die Standardnachricht, falls keine Entität erkannt wurde.
+     */
     public static String analyzeUserInput(String userInput) {
-        Map<String, String> customEntities = CustomEntitiesLoader.getCustomEntities();
+        List<Map.Entry<String, String>> customEntities = CustomEntitiesLoader.getCustomEntities();
         String[] tokens = tokenizer.tokenize(userInput);
-        System.out.println(Arrays.toString(tokens));
-        List<String> recognizedSentences = new ArrayList<>();
+        String highestPrioritySentence = null;
 
+        // Durchlaufen der Tokens und benutzerdefinierten Entitäten
         for (String token : tokens) {
-            for (Map.Entry<String, String> entry : customEntities.entrySet()) {
-                String entity = entry.getKey().toLowerCase();
-                if (token.toLowerCase().contains(entity)) {
+            for (Map.Entry<String, String> entry : customEntities) {
+                String entity = entry.getKey();
+                if (token.contains(entity)) {
                     String sentence = entry.getValue();
-                    recognizedSentences.add(sentence);
+                    // Überprüfen und aktualisieren der höchst priorisierten Entität
+                    if (highestPrioritySentence == null || customEntities.indexOf(entry) < customEntities.indexOf(getEntryByValue(customEntities, highestPrioritySentence))) {
+                        highestPrioritySentence = sentence;
+                    }
                     break;
                 }
             }
         }
 
-        if (!recognizedSentences.isEmpty()) {
-            return String.join(", ", recognizedSentences);
+        if (highestPrioritySentence != null) {
+            return highestPrioritySentence;
         } else {
             return CustomEntitiesLoader.getStandardMessage();
         }
     }
 
-
-
+    /**
+     * Hilfsmethode zum Finden eines Eintrags in einer Liste von Einträgen anhand des Werts.
+     *
+     * @param entries Die Liste von Einträgen, in der nach dem Wert gesucht wird.
+     * @param value   Der gesuchte Wert.
+     * @return Der gefundene Eintrag oder null, falls kein Eintrag mit dem Wert gefunden wurde.
+     */
+    private static <K, V> Map.Entry<K, V> getEntryByValue(List<Map.Entry<K, V>> entries, V value) {
+        for (Map.Entry<K, V> entry : entries) {
+            if (entry.getValue().equals(value)) {
+                return entry;
+            }
+        }
+        return null;
+    }
 }

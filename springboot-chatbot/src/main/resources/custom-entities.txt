@@ -3,6 +3,7 @@ Keine Ahnung
 
 #Entitäten
 
-HiHELLO : Das ist ein Satzguu
+Hi : Das ist ein Satzguu
 Test : Noch einer11124
 Welten : Hihi234v
+Sina: Test
