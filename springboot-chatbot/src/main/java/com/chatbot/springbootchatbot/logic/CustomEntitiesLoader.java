@@ -34,7 +34,7 @@ public class CustomEntitiesLoader {
     /**
      * Initialisieren und Laden benutzerdefinierter Entitäten aus der Textdatei.
      *
-     * @return ResponseEntity, das den Erfolg oder Misserfolg des Initialisierungsprozesses angibt.
+     * @return ResponseEntity
      */
     @PostConstruct
     public ResponseEntity<String> init() {
@@ -87,8 +87,6 @@ public class CustomEntitiesLoader {
             return new ResponseEntity<>("Fehler beim Hochladen der Datei: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
 
     /**
      * Speichern einer Datei an einem bestimmten Pfad.
