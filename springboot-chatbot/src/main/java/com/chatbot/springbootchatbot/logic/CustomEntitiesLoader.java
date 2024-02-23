@@ -59,21 +59,14 @@ public class CustomEntitiesLoader {
      */
     public static ResponseEntity<String> uploadFile(MultipartFile file) {
         try {
-            // Überprüfe, ob die hochgeladene Datei leer ist
             if (file.isEmpty()) {
                 return new ResponseEntity<>("Die hochgeladene Datei ist leer.", HttpStatus.INTERNAL_SERVER_ERROR);
             }
-
-            // Speichere die Datei
             saveFile(filePath, file);
-
-            // Versuche, benutzerdefinierte Entitäten und Standardnachricht zu laden
             List<Map.Entry<String, String>> loadedCustomEntities = loadCustomEntities(filePath);
             String loadedStandardMessage = loadStandardMessage(filePath);
 
-            // Überprüfe, ob das Laden erfolgreich war
             if (loadedCustomEntities.isEmpty() || loadedStandardMessage.isEmpty()) {
-                // Falls nicht, setze die alten Werte zurück und gib eine Fehlermeldung zurück
                 customEntities = loadCustomEntities(filePath);
                 standardMessage = loadStandardMessage(filePath);
 
