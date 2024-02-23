@@ -59,23 +59,43 @@ public class CustomEntitiesLoader {
      */
     public static ResponseEntity<String> uploadFile(MultipartFile file) {
         try {
-            saveFile(filePath, file);
-            customEntities = loadCustomEntities(filePath);
-            standardMessage = loadStandardMessage(filePath);
-
-            if (customEntities.isEmpty()) {
-                return new ResponseEntity<>("Die Datei ist leer oder existiert nicht.", HttpStatus.INTERNAL_SERVER_ERROR);
-            } else {
-                for (Map.Entry<String, String> entry : customEntities) {
-                    System.out.println("Benutzerdefinierte Entität: " + entry.getKey() + ", Satz: " + entry.getValue());
-                }
-                return new ResponseEntity<>("Datei erfolgreich hochgeladen.", HttpStatus.OK);
+            // Überprüfe, ob die hochgeladene Datei leer ist
+            if (file.isEmpty()) {
+                return new ResponseEntity<>("Die hochgeladene Datei ist leer.", HttpStatus.INTERNAL_SERVER_ERROR);
             }
+
+            // Speichere die Datei
+            saveFile(filePath, file);
+
+            // Versuche, benutzerdefinierte Entitäten und Standardnachricht zu laden
+            List<Map.Entry<String, String>> loadedCustomEntities = loadCustomEntities(filePath);
+            String loadedStandardMessage = loadStandardMessage(filePath);
+
+            // Überprüfe, ob das Laden erfolgreich war
+            if (loadedCustomEntities.isEmpty() || loadedStandardMessage.isEmpty()) {
+                // Falls nicht, setze die alten Werte zurück und gib eine Fehlermeldung zurück
+                customEntities = loadCustomEntities(filePath);
+                standardMessage = loadStandardMessage(filePath);
+
+                return new ResponseEntity<>("Die Standardnachricht oder die Entitäten sind leer. Bitte lade eine neue Datei hoch.", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            // Wenn alles erfolgreich war, aktualisiere die Werte
+            customEntities = loadedCustomEntities;
+            standardMessage = loadedStandardMessage;
+
+            for (Map.Entry<String, String> entry : customEntities) {
+                System.out.println("Benutzerdefinierte Entität: " + entry.getKey() + ", Satz: " + entry.getValue());
+            }
+
+            return new ResponseEntity<>("Datei erfolgreich hochgeladen.", HttpStatus.OK);
         } catch (IOException e) {
             System.err.println("Fehler beim Hochladen der Datei: " + e.getMessage());
             return new ResponseEntity<>("Fehler beim Hochladen der Datei: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
 
     /**
      * Speichern einer Datei an einem bestimmten Pfad.

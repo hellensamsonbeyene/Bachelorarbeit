@@ -1,5 +1,6 @@
 import request from "./request";
 
+// Funktion für die Analyse von Benutzereingaben
 function analyzePost(userInput: string) {
     return request({
         url: "/analyze",
@@ -8,6 +9,7 @@ function analyzePost(userInput: string) {
     });
 }
 
+// Funktion zum Hochladen von Dateien
 function uploadFile(file) {
     return request({
         url: "/uploadFile",

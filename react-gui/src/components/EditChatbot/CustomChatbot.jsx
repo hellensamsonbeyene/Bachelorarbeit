@@ -1,26 +1,25 @@
 import React, {useEffect, useRef, useState} from 'react';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+//mui
+import {
+    Paper,
+    Typography,
+    TextField,
+    Button,
+    Grid,
+} from '@mui/material';
 import {ThemeProvider} from "styled-components";
-import {Grid} from "@mui/material";
-import FileDropArea from "../FileDropArea";
 import PersonIcon from '@mui/icons-material/Person';
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
+//custom
+import FileDropArea from "../FileDropArea";
 import ChatbotService from "../../services/ChatbotService";
 import {Message} from "../../models/Message";
 
 
-
-const theme = {
-    fontFamily: 'Arial, sans-serif',
-    primary: '#008587', // Change this to your desired header background color
-    headerFontSize: '15px',
-    white: '#fff',
-    secondary: '#4a4a4a',
-};
-const CustomChatbot = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
+/**
+ * Chatbot-Komponente, FileDropArea und Chatbot
+ */
+const CustomChatbot = ({theme, setShowPopUp, setPopUpMessage, setColorPopUp}) => {
     const [userInput, setUserInput] = useState('');
     const [messages, setMessages] = useState([]);
     const messagesEndRef = useRef(null);
@@ -33,10 +32,12 @@ const CustomChatbot = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
         setCharCount(inputText.length);
     };
 
+    // Bei Änderungen der Nachrichten, scrolle zum Ende
     useEffect(() => {
         messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
+    // Behandle Benutzereingabe und sende Anfrage an das Backend
     function handleUserInput() {
         if (charCount >= maxChars){
             setShowPopUp(true);
@@ -72,7 +73,7 @@ const CustomChatbot = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
     };
 
     return (
-        <div style={{marginRight: '150px', marginTop: '50px'}}>
+        <div style={{marginRight: '150px', marginTop: '10px'}}>
             <ThemeProvider theme={theme}>
                 <Grid
                     container
@@ -127,7 +128,8 @@ const CustomChatbot = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
                             <div style={{ display: 'flex', alignItems: 'start' }}>
                                 <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1}}>
                                     <TextField
-                                        multiline={4}
+                                        multiline
+                                        minRows={4}
                                         type="text"
                                         placeholder="Schreibe eine Nachricht..."
                                         value={userInput}
@@ -149,7 +151,6 @@ const CustomChatbot = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
                         </div>
                     </Grid>
                 </Grid>
-
             </ThemeProvider>
         </div>
     );

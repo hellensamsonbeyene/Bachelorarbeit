@@ -1,67 +1,42 @@
-// react
-import React, {useState} from "react";
-
-import {ThemeProvider, createTheme} from '@mui/material/styles';
-import NavigationBar from "../../NavigationBar/NavigationBar";
-import CustomChatbot from "../../components/EditChatbot/CustomChatbot";
+import React, { useState } from "react";
+//mui
 import Snackbar from "@mui/material/Snackbar";
 import Alert from '@mui/material/Alert';
-
-//custom
-
-
+// custom
+import NavigationBar from "../../NavigationBar/NavigationBar";
+import CustomChatbot from "../../components/EditChatbot/CustomChatbot";
 
 // default colors
-const palette = {
-    primary: '#008587'
-}
+const themeChatbot = {
+    fontFamily: 'Arial, sans-serif',
+    primary: '#008587',
+    headerFontSize: '15px',
+    white: '#fff',
+    secondary: '#4a4a4a',
+};
 
+/**
+ * Hauptseite-Komponente
+ */
 const MainPage = () => {
-
-      // eslint-disable-next-line
-    const [getColorPalette, setColorPalette] = React.useState(palette);
     const [showPopUp, setShowPopUp] = useState(false);
     const [popUpMessage, setPopUpMessage] = useState("");
     const [colorPopUp, setColorPopUp] = useState("");
 
-    // Theme for ThemeProvider Component
-    let theme = createTheme({
-        palette: {
-            primary: {
-                main: getColorPalette['primary'], // buttons, sliders
-            },
-            info: {
-                main: getColorPalette['primary'],
-            },
-            error: {
-                main: '#d32f2f'
-            },
-            success: {
-                main: '#2e7d32'
-            },
-            warning: {
-                main: '#ed6c02'
-            },
-        },
-    });
-
-    return (
-        <>
-            <ThemeProvider theme={theme}>
-                <NavigationBar/>
-            </ThemeProvider>
-            <CustomChatbot setShowPopUp={setShowPopUp} setPopUpMessage={setPopUpMessage} setColorPopUp={setColorPopUp} />
+    return (<>
+            <NavigationBar theme={themeChatbot}/>
+            <CustomChatbot theme={themeChatbot} setShowPopUp={setShowPopUp} setPopUpMessage={setPopUpMessage} setColorPopUp={setColorPopUp} />
             <Snackbar
                 open={showPopUp}
                 anchorOrigin={{
                     vertical: 'bottom',
                     horizontal: 'left',
                 }}
-                autoHideDuration={3000} // 3000 milliseconds (3 seconds)
-                onClose={() => {setShowPopUp(false)}}
+                autoHideDuration={3000} // 3 Sekunden
+                onClose={() => { setShowPopUp(false) }}
             >
                 <Alert
-                    severity={colorPopUp} // Make sure colorPopUp is "success"
+                    severity={colorPopUp}
                     variant="filled"
                     sx={{ width: '100%' }}
                 >
@@ -70,7 +45,6 @@ const MainPage = () => {
             </Snackbar>
         </>
     );
-
 }
 
 export default MainPage;

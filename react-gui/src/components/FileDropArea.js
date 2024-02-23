@@ -1,12 +1,15 @@
 import React, { useRef,useState } from 'react';
+//mui
 import UploadFileIcon from '@mui/icons-material/UploadFile';
+//custom
 import ChatbotService from "../services/ChatbotService";
 
-
+/**
+ * FileDropArea-Komponente
+ * */
 const FileDropArea = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
     const fileInputRef = useRef(null);
     const [lastFileName, setLastFileName] = useState(null);
-
 
     const handleDrop = (event) => {
         event.preventDefault();
@@ -16,6 +19,7 @@ const FileDropArea = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
         }
     };
 
+    //Auswahl einer Datei über den Dateiauswahldialog
     const handleFileInput = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -23,20 +27,18 @@ const FileDropArea = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
         }
     };
 
+    // Hauptfunktion zum Verarbeiten der ausgewählten Datei
     const handleFile = (file) => {
-        setLastFileName(file.name); // Set lastFileName when a file is added
+        setLastFileName(file.name); // Setze lastFileName, wenn eine Datei hinzugefügt wird
         if (file.type === 'text/plain') {
             const reader = new FileReader();
-
             reader.onload = (e) => {
                 const content = e.target.result;
                 const jsonContent = {
                     fileContent: content,
                 };
-
                 const formData = new FormData();
                 formData.append('file', file);
-
                 ChatbotService.uploadFile(formData)
                     .then(() => {
                         URL.revokeObjectURL(file.preview);
@@ -53,7 +55,6 @@ const FileDropArea = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
                     });
             };
             file.preview = URL.createObjectURL(file);
-
             reader.readAsText(file);
         } else {
             setShowPopUp(true);
