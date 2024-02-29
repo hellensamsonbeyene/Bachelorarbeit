@@ -1,13 +1,13 @@
-import React, { useRef,useState } from 'react';
-//mui
+import React, { useRef, useState } from 'react';
+// mui
 import UploadFileIcon from '@mui/icons-material/UploadFile';
-//custom
+// custom
 import ChatbotService from "../services/ChatbotService";
 
 /**
  * FileDropArea-Komponente
  * */
-const FileDropArea = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
+const FileDropArea = ({ setShowPopUp, setPopUpMessage, setColorPopUp }) => {
     const fileInputRef = useRef(null);
     const [lastFileName, setLastFileName] = useState(null);
 
@@ -19,7 +19,7 @@ const FileDropArea = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
         }
     };
 
-    //Auswahl einer Datei über den Dateiauswahldialog
+    // Auswahl einer Datei über den Dateiauswahldialog
     const handleFileInput = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -67,14 +67,21 @@ const FileDropArea = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
         event.preventDefault();
     };
 
-    const handleClick = (event) => {
-        const { target = {} } = event || {};
-        target.value = "";
+    const handleClick = () => {
         fileInputRef.current.click();
+    };
+
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            fileInputRef.current.click();
+        }
     };
 
     return (
         <div
+            role="button"
+            tabIndex={0}
+            aria-labelledby="fileDropAreaLabel"
             style={{
                 border: '2px dashed #aaa',
                 borderRadius: '5px',
@@ -86,10 +93,13 @@ const FileDropArea = ({setShowPopUp, setPopUpMessage, setColorPopUp}) => {
             onDrop={handleDrop}
             onDragOver={handleDragOver}
             onClick={handleClick}
+            onKeyDown={handleKeyDown}
         >
-            Ziehen Sie hier die .txt Datei rein <br/><br/> oder <br/><br/>Klicken Sie hier, um eine Datei hochzuladen. <br/><br/>
-            {lastFileName && <div>Zuletzt hinzugefügte Datei: {lastFileName}</div>}
-            <UploadFileIcon fontSize="large"/>
+            <div id="fileDropAreaLabel">
+                Ziehen Sie hier die .txt Datei rein <br /><br /> oder <br /><br />Klicken Sie hier, um eine Datei hochzuladen. <br /><br />
+                {lastFileName && <div>Zuletzt hinzugefügte Datei: {lastFileName}</div>}
+                <UploadFileIcon fontSize="large" />
+            </div>
             <input
                 type="file"
                 accept=".txt"

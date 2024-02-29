@@ -23,14 +23,21 @@ const CustomChatbot = ({theme, setShowPopUp, setPopUpMessage, setColorPopUp}) =>
     const [userInput, setUserInput] = useState('');
     const [messages, setMessages] = useState([]);
     const messagesEndRef = useRef(null);
+    const inputRef = useRef(null);
     const [charCount, setCharCount] = useState(0);
     const maxChars = 500;
+
 
     const handleInputChange = (e) => {
         const inputText = e.target.value;
         setUserInput(inputText);
         setCharCount(inputText.length);
     };
+
+    // Nach dem Laden der Seite das Textfeld fokussieren
+    useEffect(() => {
+        inputRef.current.focus();
+    }, []);
 
     // Bei Änderungen der Nachrichten, scrolle zum Ende
     useEffect(() => {
@@ -134,7 +141,14 @@ const CustomChatbot = ({theme, setShowPopUp, setPopUpMessage, setColorPopUp}) =>
                                         placeholder="Schreibe eine Nachricht..."
                                         value={userInput}
                                         onChange={handleInputChange}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter' && !e.shiftKey) {
+                                                e.preventDefault(); // Verhindert, dass eine neue Zeile eingefügt wird
+                                                handleUserInput(); // Ruft die Methode zum Senden der Nachricht auf
+                                            }
+                                        }}
                                         style={{ width: '100%', marginBottom: '15px', backgroundColor: theme.white, color: theme.primary }}
+                                        inputRef={inputRef}
                                     />
                                     <div style={{ fontSize: '18px', color: charCount > maxChars ? 'red' : theme.white }}>
                                         {charCount}/{maxChars} Zeichen
