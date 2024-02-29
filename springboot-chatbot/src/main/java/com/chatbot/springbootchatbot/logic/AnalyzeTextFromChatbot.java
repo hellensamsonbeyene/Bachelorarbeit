@@ -41,7 +41,8 @@ public class AnalyzeTextFromChatbot {
         for (String token : tokens) {
             for (Map.Entry<String, String> entry : customEntities) {
                 String entity = entry.getKey();
-                if (token.contains(entity)) {
+                if (entity.contains(token)) {
+                    System.out.println("erkannte Entität:" + entry.getValue() + "token" + token);
                     String sentence = entry.getValue();
                     // Überprüfen und aktualisieren der höchst priorisierten Entität
                     if (highestPrioritySentence == null || customEntities.indexOf(entry) < customEntities.indexOf(getEntryByValue(customEntities, highestPrioritySentence))) {
