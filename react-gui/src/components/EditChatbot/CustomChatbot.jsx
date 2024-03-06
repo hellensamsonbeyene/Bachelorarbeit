@@ -27,7 +27,6 @@ const CustomChatbot = ({theme, setShowPopUp, setPopUpMessage, setColorPopUp}) =>
     const [charCount, setCharCount] = useState(0);
     const maxChars = 500;
 
-
     const handleInputChange = (e) => {
         const inputText = e.target.value;
         setUserInput(inputText);
@@ -96,45 +95,60 @@ const CustomChatbot = ({theme, setShowPopUp, setPopUpMessage, setColorPopUp}) =>
                             <Typography variant="h5" gutterBottom style={{ textAlign: 'center', color:'#ffff' }}>
                                 Chatbot
                             </Typography>
-                            <div style={{ display: 'flex', flexDirection: 'column', height: '500px', overflowY: 'auto', marginBottom: '20px' ,backgroundColor: '#ffff', flexWrap: 'wrap' }}>
-                                <div style={{padding:'10px',display: 'flex',flexDirection: 'column'}}>
-                                {messages.map((message, index) => (
-                                    <div key={index} style={{ display: 'flex', alignSelf: message.role === 'user' ? 'flex-end' : 'flex-start', marginBottom: '10px', justifyContent: message.role === 'user' ? 'flex-end' : 'flex-start', // Diese Zeile wurde angepasst
-                                    }}>
-                                        {message.role === 'bot' && (
-                                            <div style={{ marginRight: '10px' }}>
-                                                {renderAvatar(message.role)}
-                                            </div>
-                                        )}
-                                        <Paper
-                                            style={{
-                                                whiteSpace: 'pre-wrap',
-                                                padding: '10px',
-                                                borderRadius: '15px',
-                                                background: message.role === 'user' ? '#2196F3' : '#e0e0e0',
-                                                color: message.role === 'user' ? '#fff' : '#000',
-                                                maxWidth: '70%',
-                                                overflow: 'hidden',
-                                                wordBreak: 'break-word',
-                                                display: 'inline-block',
-                                            }}
-                                        >
-                                            {message.content}
-                                        </Paper>
-                                        {message.role === 'user' && (
-                                            <div style={{ marginLeft: '10px' }}>
-                                                {renderAvatar(message.role)}
-                                            </div>
-                                        )}
-                                    </div>
-                                ))}
-                                {/* Dieses leere div sorgt dafür, dass das Scrollen am unteren Rand bleibt */}
-                                <div ref={messagesEndRef} />
+                            <div
+                                tabIndex={0}
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    height: '500px',
+                                    overflowY: 'auto',
+                                    marginBottom: '20px',
+                                    backgroundColor: '#ffff',
+                                    flexWrap: 'wrap'
+                                }}
+                            >
+                                <div style={{padding: '10px', display: 'flex', flexDirection: 'column'}}>
+                                    {messages.map((message, index) => (
+                                        <div key={index} style={{
+                                            display: 'flex',
+                                            alignSelf: message.role === 'user' ? 'flex-end' : 'flex-start',
+                                            marginBottom: '10px',
+                                            justifyContent: message.role === 'user' ? 'flex-end' : 'flex-start', // Diese Zeile wurde angepasst
+                                        }}>
+                                            {message.role === 'bot' && (
+                                                <div style={{marginRight: '10px'}}>
+                                                    {renderAvatar(message.role)}
+                                                </div>
+                                            )}
+                                            <Paper
+                                                style={{
+                                                    whiteSpace: 'pre-wrap',
+                                                    padding: '10px',
+                                                    borderRadius: '15px',
+                                                    background: message.role === 'user' ? theme.primary : '#e0e0e0',
+                                                    color: message.role === 'user' ? '#fff' : '#000',
+                                                    maxWidth: '70%',
+                                                    overflow: 'hidden',
+                                                    wordBreak: 'break-word',
+                                                    display: 'inline-block',
+                                                }}
+                                            >
+                                                {message.content}
+                                            </Paper>
+                                            {message.role === 'user' && (
+                                                <div style={{marginLeft: '10px'}}>
+                                                    {renderAvatar(message.role)}
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))}
+                                    {/* Dieses leere div sorgt dafür, dass das Scrollen am unteren Rand bleibt */}
+                                    <div ref={messagesEndRef}/>
+                                </div>
                             </div>
-                            </div>
-                            <div style={{ display: 'flex', alignItems: 'start' }}>
-                                <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1}}>
-                                    <TextField
+                            <div style={{display: 'flex', alignItems: 'start'}}>
+                                <div style={{display: 'flex', flexDirection: 'column', flexGrow: 1}} ref={inputRef}>
+                                <TextField
                                         multiline
                                         minRows={4}
                                         type="text"
@@ -150,8 +164,8 @@ const CustomChatbot = ({theme, setShowPopUp, setPopUpMessage, setColorPopUp}) =>
                                         style={{ width: '100%', marginBottom: '15px', backgroundColor: theme.white, color: theme.primary }}
                                         inputRef={inputRef}
                                     />
-                                    <div style={{ fontSize: '18px', color: charCount > maxChars ? 'red' : theme.white }}>
-                                        {charCount}/{maxChars} Zeichen
+                                    <div style={{ fontSize: '18px', color: charCount > maxChars ? theme.error : theme.white }}>
+                                        {charCount > maxChars ? <strong>{charCount}/{maxChars} Zeichen - zu viele Zeichen!</strong> : `${charCount}/${maxChars} Zeichen`}
                                     </div>
                                 </div>
                                 <Button

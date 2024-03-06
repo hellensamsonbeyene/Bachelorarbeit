@@ -9,10 +9,11 @@ import CustomChatbot from "../../components/EditChatbot/CustomChatbot";
 // default colors
 const themeChatbot = {
     fontFamily: 'Arial, sans-serif',
-    primary: '#008587',
+    primary: '#002C34',
     headerFontSize: '15px',
     white: '#fff',
     secondary: '#4a4a4a',
+    error: '#F0B2B2'
 };
 
 /**
