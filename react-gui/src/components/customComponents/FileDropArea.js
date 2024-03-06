@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 // mui
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 // custom
-import ChatbotService from "../services/ChatbotService";
+import ChatbotService from "../../services/ChatbotService";
 
 /**
  * FileDropArea-Komponente

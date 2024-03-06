@@ -11,9 +11,11 @@ import {ThemeProvider} from "styled-components";
 import PersonIcon from '@mui/icons-material/Person';
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 //custom
-import FileDropArea from "../FileDropArea";
+import FileDropArea from "../customComponents/FileDropArea";
 import ChatbotService from "../../services/ChatbotService";
 import {Message} from "../../models/Message";
+import CustomTooltip from "../customComponents/Tooltip";
+import HowToChatbot from "../customComponents/HowToChatbot";
 
 
 /**
@@ -79,7 +81,7 @@ const CustomChatbot = ({theme, setShowPopUp, setPopUpMessage, setColorPopUp}) =>
     };
 
     return (
-        <div style={{marginRight: '150px', marginTop: '10px'}}>
+        <div style={{display: 'flex', marginRight: '150px', marginTop: '30px'}}>
             <ThemeProvider theme={theme}>
                 <Grid
                     container
@@ -87,12 +89,14 @@ const CustomChatbot = ({theme, setShowPopUp, setPopUpMessage, setColorPopUp}) =>
                     spacing={3}
                     alignItems="center"
                 >
-                    <Grid item>
-                        <FileDropArea setShowPopUp={setShowPopUp} setPopUpMessage={setPopUpMessage} setColorPopUp={setColorPopUp}/>
-                    </Grid>
+                    <CustomTooltip title="Daten hier ablegen">
+                        <Grid item>
+                            <FileDropArea setShowPopUp={setShowPopUp} setPopUpMessage={setPopUpMessage} setColorPopUp={setColorPopUp}/>
+                        </Grid>
+                    </CustomTooltip>
                     <Grid item>
                         <div style={{ width: '600px', margin: 'auto', padding: '20px', borderRadius: '10px', boxShadow: '0 0 10px rgba(0,0,0,0.1)', backgroundColor: theme.primary}}>
-                            <Typography variant="h5" gutterBottom style={{ textAlign: 'center', color:'#ffff' }}>
+                        <Typography variant="h5" gutterBottom style={{ textAlign: 'center', color:'#ffff' }}>
                                 Chatbot
                             </Typography>
                             <div
@@ -148,37 +152,44 @@ const CustomChatbot = ({theme, setShowPopUp, setPopUpMessage, setColorPopUp}) =>
                             </div>
                             <div style={{display: 'flex', alignItems: 'start'}}>
                                 <div style={{display: 'flex', flexDirection: 'column', flexGrow: 1}} ref={inputRef}>
-                                <TextField
-                                        multiline
-                                        minRows={4}
-                                        type="text"
-                                        placeholder="Schreibe eine Nachricht..."
-                                        value={userInput}
-                                        onChange={handleInputChange}
-                                        onKeyDown={(e) => {
-                                            if (e.key === 'Enter' && !e.shiftKey) {
-                                                e.preventDefault(); // Verhindert, dass eine neue Zeile eingefügt wird
-                                                handleUserInput(); // Ruft die Methode zum Senden der Nachricht auf
-                                            }
-                                        }}
-                                        style={{ width: '100%', marginBottom: '15px', backgroundColor: theme.white, color: theme.primary }}
-                                        inputRef={inputRef}
-                                    />
+                                    <CustomTooltip title="Hier Nachricht schreiben">
+                                        <TextField
+                                            multiline
+                                            minRows={4}
+                                            type="text"
+                                            placeholder="Schreibe eine Nachricht..."
+                                            value={userInput}
+                                            onChange={handleInputChange}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter' && !e.shiftKey) {
+                                                    e.preventDefault(); // Verhindert, dass eine neue Zeile eingefügt wird
+                                                    handleUserInput(); // Ruft die Methode zum Senden der Nachricht auf
+                                                }
+                                            }}
+                                            style={{ width: '100%', marginBottom: '15px', backgroundColor: theme.white, color: theme.primary }}
+                                            inputRef={inputRef}
+                                        />
+                                    </CustomTooltip>
                                     <div style={{ fontSize: '18px', color: charCount > maxChars ? theme.error : theme.white }}>
                                         {charCount > maxChars ? <strong>{charCount}/{maxChars} Zeichen - zu viele Zeichen!</strong> : `${charCount}/${maxChars} Zeichen`}
                                     </div>
                                 </div>
-                                <Button
-                                    variant="contained"
-                                    style={{ backgroundColor: theme.white, color: theme.primary, marginLeft: '10px' }}
-                                    onClick={handleUserInput}
-                                >
-                                    Senden
-                                </Button>
+                                <CustomTooltip title="Nachricht absenden">
+                                    <Button
+                                        variant="contained"
+                                        style={{ backgroundColor: theme.white, color: theme.primary, marginLeft: '10px' }}
+                                        onClick={handleUserInput}
+                                    >
+                                        Senden
+                                    </Button>
+                                </CustomTooltip>
                             </div>
                         </div>
                     </Grid>
-                </Grid>
+                    <Grid item>
+                        <HowToChatbot theme={theme}/>
+                    </Grid>
+                    </Grid>
             </ThemeProvider>
         </div>
     );

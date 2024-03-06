@@ -4,7 +4,7 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from '@mui/material/Alert';
 // custom
 import NavigationBar from "../../NavigationBar/NavigationBar";
-import CustomChatbot from "../../components/EditChatbot/CustomChatbot";
+import CustomChatbot from "../../components/CustomChabot/CustomChatbot";
 
 // default colors
 const themeChatbot = {
@@ -37,7 +37,7 @@ const MainPage = () => {
                 onClose={() => { setShowPopUp(false) }}
             >
                 <Alert
-                    severity={colorPopUp}
+                    severity={colorPopUp || "info"}
                     variant="filled"
                     sx={{ width: '100%' }}
                 >
