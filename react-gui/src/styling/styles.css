@@ -1,51 +1,27 @@
 @import url('https://fonts.googleapis.com/css2?family=Hind:wght@700&display=swap');
 
-.App{
-    font-family: sans-serif;
-    text-align: center;
-}
-.TextBox{
-    position: absolute;
-    bottom: 2.5%;
-    width: 100%;
-}
-.MuiDrawer-paper {
-  width: 320px;
-}
-
-.MuiButton-outlined {
-    color: black !important;
-}
-
-.Mui-disabled.MuiButton-outlined {
-    color: lightgray !important;
-}
-
-#burger_menu {
-    height: 1.5em;
-    width: 1.5em;
-}
-
-#burger_menu:hover {
-    background-color: #EEEEEE;
-    color: #333333;
-    border-radius: 10px;
-}
-
-.accordion-text {
-    margin-left: 20% !important;
-}
-
-.next_to_each_other {
-    max-width: 300px;
-    display: flex;
-    flex-wrap: wrap;
-}
-
 .pageTitle{
     font-family: 'Hind', sans-serif !important;
     font-style: italic;
     line-height: normal !important;
     color: white;
     transform: translateY(8px);
+}
+
+.how-to-container {
+    max-width: 600px;
+    margin: 0 auto;
+    color: #002C34;
+}
+
+.how-to-step {
+    padding-left: 20px;
+}
+
+.bold-text {
+    font-weight: bold;
+}
+
+.how-to-subtitle {
+    padding-left: 20px;
 }

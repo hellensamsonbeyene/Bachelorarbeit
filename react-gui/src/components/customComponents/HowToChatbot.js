@@ -1,11 +1,11 @@
 import React from 'react';
-import '../../styling/HowToChatbot.css';
+import '../../styling/styles.css';
 
 const HowToChatbot = () => {
     return (
         <div className="how-to-container">
             <h1>So erstellst du deinen eigenen Chatbot:</h1>
-            <h2>1. Strukturiere deine Textdatei:</h2>
+            <h2>1. Bereite deine strukturierte Textdatei vor:</h2>
             <div className="how-to-step">
                 Erstelle eine Textdatei in folgendem Format:
             </div>
