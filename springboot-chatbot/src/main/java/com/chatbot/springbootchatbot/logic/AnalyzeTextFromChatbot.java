@@ -33,15 +33,16 @@ public class AnalyzeTextFromChatbot {
      * @return Der Satz der höchst priorisierten erkannten Entität oder die Standardnachricht, falls keine Entität erkannt wurde.
      */
     public static String analyzeUserInput(String userInput) {
+
         List<Map.Entry<String, String>> customEntities = CustomEntitiesLoader.getCustomEntities();
         String[] tokens = tokenizer.tokenize(userInput);
         String highestPrioritySentence = null;
-
+        String[] processedTokens = ProcessTokens.processTokens(tokens,customEntities);
         // Durchlaufen der Tokens und benutzerdefinierten Entitäten
-        for (String token : tokens) {
+        for (String token : processedTokens) {
             for (Map.Entry<String, String> entry : customEntities) {
                 String entity = entry.getKey();
-                if (entity.contains(token)) {
+                if (entity.startsWith(token)) {
                     System.out.println("erkannte Entität:" + entry.getValue() + "token" + token);
                     String sentence = entry.getValue();
                     // Überprüfen und aktualisieren der höchst priorisierten Entität

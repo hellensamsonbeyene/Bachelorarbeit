@@ -1,8 +1,12 @@
 #Standardnachricht
-Entschuldigung, das habe ich nicht verstanden.
+Das habe ich leider nicht verstanden
 
 #Entitäten
-Temperatur: Die aktuelle Temperatur in Berlin beträgt 20 Grad Celsius.
-Wettervorhersage: Die Wettervorhersage für die nächsten Tage in Berlin sieht sonnig aus.
-Niederschlag: In Berlin wird kein Niederschlag erwartet.
-Wind: Der Wind in Berlin weht mit einer Geschwindigkeit von 15 km/h aus Richtung Nordwest.
+Vorlesung : Besuchen Sie interessante Vorlesungen zu verschiedenen Fachgebieten.
+Professoren : Unsere erfahrenen Professoren stehen Ihnen für Fragen und Diskussionen zur Verfügung.
+Professorin: Test1.
+Bibliothek : Nutzen Sie unsere gut ausgestattete Bibliothek für Ihr Studium.
+Studium : Erforschen Sie unsere vielfältigen Studiengänge und finden Sie den passenden für sich.
+Studentenwohnheim : Informationen zu Unterkünften für Studierende.
+Campus : Erkunden Sie unseren schönen Campus und seine Einrichtungen.
+Camis : Erkunden Sie unseren schönen Campus und seine Einrichtungen.test
