@@ -46,14 +46,11 @@ public class ChatbotController {
 
     /**
      * Setzt den aktuellen Chatbot zurück auf den BeispielChatbot
-     *
-     * @return ResponseEntity
-     */
+     **/
     @PostMapping("/resetChatbot")
-    public ResponseEntity<String> resetChatbot() throws IOException {
+    public void resetChatbot() throws IOException {
          CustomEntitiesLoader.customEntities = loadCustomEntities(CustomEntitiesLoader.initialFilePath);
         CustomEntitiesLoader.standardMessage = loadStandardMessage(CustomEntitiesLoader.initialFilePath);
-        return ResponseEntity.ok("Chatbot wurde zurückgesetzt.");
     }
 
     public record UserInputMessage(String userInput) {

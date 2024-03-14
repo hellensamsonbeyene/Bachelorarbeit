@@ -18,6 +18,7 @@ import ChatbotService from "../../services/ChatbotService";
  */
 const CustomChatbot = ({theme, setShowPopUp, setPopUpMessage, setColorPopUp}) => {
 
+    //Funktion zum Zurücksetzen des Chatbots mit Anfrage ans Backend
     const resetChatbot = () => {
         ChatbotService.resetChatbot()
             .then(() => {
