@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
+import static com.chatbot.springbootchatbot.logic.CustomEntitiesLoader.*;
+
 /**
  * ChatbotController behandelt eingehende HTTP-Anfragen im Zusammenhang mit der Chatbot-Funktionalität.
  */
@@ -38,6 +42,18 @@ public class ChatbotController {
     @PostMapping("/uploadFile")
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
         return CustomEntitiesLoader.uploadFile(file);
+    }
+
+    /**
+     * Setzt den aktuellen Chatbot zurück auf den BeispielChatbot
+     *
+     * @return ResponseEntity
+     */
+    @PostMapping("/resetChatbot")
+    public ResponseEntity<String> resetChatbot() throws IOException {
+         CustomEntitiesLoader.customEntities = loadCustomEntities(CustomEntitiesLoader.initialFilePath);
+        CustomEntitiesLoader.standardMessage = loadStandardMessage(CustomEntitiesLoader.initialFilePath);
+        return ResponseEntity.ok("Chatbot wurde zurückgesetzt.");
     }
 
     public record UserInputMessage(String userInput) {

@@ -33,7 +33,7 @@ const MainPage = () => {
                     vertical: 'bottom',
                     horizontal: 'left',
                 }}
-                autoHideDuration={3000} // 3 Sekunden
+                autoHideDuration={5000} // 3 Sekunden
                 onClose={() => { setShowPopUp(false) }}
             >
                 <Alert

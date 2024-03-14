@@ -3,6 +3,7 @@ import React, { useRef, useState } from 'react';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 // custom
 import ChatbotService from "../../services/ChatbotService";
+import CustomTooltip from "./Tooltip";
 
 /**
  * FileDropArea-Komponente
@@ -78,6 +79,7 @@ const FileDropArea = ({ setShowPopUp, setPopUpMessage, setColorPopUp }) => {
     };
 
     return (
+        <CustomTooltip title="Daten hier ablegen">
         <div
             role="button"
             tabIndex={0}
@@ -87,7 +89,7 @@ const FileDropArea = ({ setShowPopUp, setPopUpMessage, setColorPopUp }) => {
                 borderRadius: '5px',
                 padding: '20px',
                 textAlign: 'center',
-                margin: '20px',
+                marginBottom: '20px',
                 cursor: 'pointer',
             }}
             onDrop={handleDrop}
@@ -108,6 +110,7 @@ const FileDropArea = ({ setShowPopUp, setPopUpMessage, setColorPopUp }) => {
                 onChange={handleFileInput}
             />
         </div>
+        </CustomTooltip>
     );
 };
 

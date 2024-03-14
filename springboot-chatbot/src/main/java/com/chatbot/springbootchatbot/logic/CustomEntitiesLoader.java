@@ -20,10 +20,10 @@ import java.util.AbstractMap;
 @Component
 public class CustomEntitiesLoader {
     private static final String filePath = "springboot-chatbot/src/main/resources/custom-entities.txt";
-    private static final String initialFilePath = "springboot-chatbot/src/main/resources/example-entities.txt";
+    public static final String initialFilePath = "springboot-chatbot/src/main/resources/example-entities.txt";
 
-    private static List<Map.Entry<String, String>> customEntities;
-    private static String standardMessage;
+    public static List<Map.Entry<String, String>> customEntities;
+    public static String standardMessage;
 
     public static List<Map.Entry<String, String>> getCustomEntities() {
         return customEntities;

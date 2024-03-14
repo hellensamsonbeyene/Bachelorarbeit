@@ -20,9 +20,19 @@ function uploadFile(file) {
         },
     });
 }
+
+// Funktion zum Zurücksetzen des Chatbots
+function resetChatbot() {
+    return request({
+        url: "/resetChatbot",
+        method: "POST"
+    });
+}
+
 const ChatbotService = {
     analyzePost,
-    uploadFile
+    uploadFile,
+    resetChatbot
 };
 
 
