@@ -44,7 +44,7 @@ public class CustomEntitiesLoader {
         customEntities = loadCustomEntities(initialFilePath);
         standardMessage = loadStandardMessage(initialFilePath);
 
-        if (customEntities.isEmpty() || standardMessage.isEmpty()) {
+        if (customEntities == null || standardMessage == null) {
             return new ResponseEntity<>("Die Liste der benutzerdefinierten Entitäten oder die Standardnachricht ist leer oder die Datei existiert nicht.", HttpStatus.INTERNAL_SERVER_ERROR);
         } else {
             for (Map.Entry<String, String> entry : customEntities) {
@@ -69,10 +69,7 @@ public class CustomEntitiesLoader {
             List<Map.Entry<String, String>> loadedCustomEntities = loadCustomEntities(filePath);
             String loadedStandardMessage = loadStandardMessage(filePath);
 
-            if (loadedCustomEntities.isEmpty() || loadedStandardMessage.isEmpty()) {
-                customEntities = loadCustomEntities(filePath);
-                standardMessage = loadStandardMessage(filePath);
-
+            if (loadedCustomEntities ==null || loadedStandardMessage==null) {
                 return new ResponseEntity<>("Die Standardnachricht oder die Entitäten sind leer. Bitte lade eine neue Datei hoch.", HttpStatus.INTERNAL_SERVER_ERROR);
             }
             //Überprüfen, ob Stoppwörter in den Entitäten existieren
@@ -144,7 +141,9 @@ public class CustomEntitiesLoader {
         } catch (IOException e) {
             System.err.println("Fehler beim Laden der Standardnachricht aus der Datei: " + filePath + ". Details: " + e.getMessage());
         }
-
+        if (standardMessage.isEmpty()) {
+            return null;
+        }
         return standardMessage;
     }
 
@@ -181,6 +180,9 @@ public class CustomEntitiesLoader {
             }
         } catch (IOException e) {
             System.err.println("Fehler beim Laden benutzerdefinierter Entitäten aus der Datei: " + filePath + ". Details: " + e.getMessage());
+        }
+        if (customEntitiesList.isEmpty()) {
+            return null;
         }
         return customEntitiesList;
     }
