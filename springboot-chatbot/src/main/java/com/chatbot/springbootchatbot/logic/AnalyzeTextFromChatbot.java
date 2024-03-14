@@ -7,6 +7,7 @@ import opennlp.tools.tokenize.TokenizerModel;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -37,13 +38,15 @@ public class AnalyzeTextFromChatbot {
         List<Map.Entry<String, String>> customEntities = CustomEntitiesLoader.getCustomEntities();
         String[] tokens = tokenizer.tokenize(userInput);
         String highestPrioritySentence = null;
+        //Prüfen der Rechtschreibung der Tokens und Filtern der Stoppwörter
         String[] processedTokens = ProcessTokens.processTokens(tokens,customEntities);
+        System.out.println("Processed Tokens: " + Arrays.toString(processedTokens));
         // Durchlaufen der Tokens und benutzerdefinierten Entitäten
         for (String token : processedTokens) {
             for (Map.Entry<String, String> entry : customEntities) {
                 String entity = entry.getKey();
                 if (entity.startsWith(token)) {
-                    System.out.println("erkannte Entität:" + entry.getValue() + "token" + token);
+                    System.out.println("Erkannte Entität: " + entity + " und Token: " + token);
                     String sentence = entry.getValue();
                     // Überprüfen und aktualisieren der höchst priorisierten Entität
                     if (highestPrioritySentence == null || customEntities.indexOf(entry) < customEntities.indexOf(getEntryByValue(customEntities, highestPrioritySentence))) {

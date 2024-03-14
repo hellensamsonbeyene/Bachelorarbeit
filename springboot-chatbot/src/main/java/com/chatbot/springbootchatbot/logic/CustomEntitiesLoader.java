@@ -20,6 +20,8 @@ import java.util.AbstractMap;
 @Component
 public class CustomEntitiesLoader {
     private static final String filePath = "springboot-chatbot/src/main/resources/custom-entities.txt";
+    private static final String initialFilePath = "springboot-chatbot/src/main/resources/example-entities.txt";
+
     private static List<Map.Entry<String, String>> customEntities;
     private static String standardMessage;
 
@@ -37,9 +39,10 @@ public class CustomEntitiesLoader {
      * @return ResponseEntity
      */
     @PostConstruct
-    public ResponseEntity<String> init() {
-        customEntities = loadCustomEntities(filePath);
-        standardMessage = loadStandardMessage(filePath);
+    public ResponseEntity<String> init() throws IOException {
+        //Überprüfen, ob Stoppwörter in den Entitäten existieren
+        customEntities = loadCustomEntities(initialFilePath);
+        standardMessage = loadStandardMessage(initialFilePath);
 
         if (customEntities.isEmpty() || standardMessage.isEmpty()) {
             return new ResponseEntity<>("Die Liste der benutzerdefinierten Entitäten oder die Standardnachricht ist leer oder die Datei existiert nicht.", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -72,7 +75,8 @@ public class CustomEntitiesLoader {
 
                 return new ResponseEntity<>("Die Standardnachricht oder die Entitäten sind leer. Bitte lade eine neue Datei hoch.", HttpStatus.INTERNAL_SERVER_ERROR);
             }
-
+            //Überprüfen, ob Stoppwörter in den Entitäten existieren
+            StopwordsLoader.checkForStopwords(loadedCustomEntities);
             // Wenn alles erfolgreich war, aktualisiere die Werte
             customEntities = loadedCustomEntities;
             standardMessage = loadedStandardMessage;
@@ -150,7 +154,7 @@ public class CustomEntitiesLoader {
      * @param filePath Der Pfad zur Textdatei.
      * @return Liste benutzerdefinierter Entitäten als Schlüssel-Wert-Paare.
      */
-    public static List<Map.Entry<String, String>> loadCustomEntities(String filePath) {
+    public static List<Map.Entry<String, String>> loadCustomEntities(String filePath) throws IOException {
         List<Map.Entry<String, String>> customEntitiesList = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
@@ -168,6 +172,8 @@ public class CustomEntitiesLoader {
                     if (parts.length == 2) {
                         String currentEntity = parts[0].trim().toLowerCase();
                         String sentence = parts[1].trim();
+                        // Überprüfung auf Stoppwörter
+
                         customEntitiesList.add(new AbstractMap.SimpleEntry<>(currentEntity, sentence));
                         System.out.println("Entität " + currentEntity + ", Satz: " + sentence);
                     }
@@ -176,7 +182,6 @@ public class CustomEntitiesLoader {
         } catch (IOException e) {
             System.err.println("Fehler beim Laden benutzerdefinierter Entitäten aus der Datei: " + filePath + ". Details: " + e.getMessage());
         }
-
         return customEntitiesList;
     }
 }

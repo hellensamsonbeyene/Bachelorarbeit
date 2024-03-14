@@ -40,7 +40,8 @@ public class ProcessTokens {
                 processedTokens.add(closestEntity);
             }
         }
-        return processedTokens.toArray(new String[0]);
+        //Filtern der Stopwörter aus den Tokens
+        return StopwordsLoader.cleanTokens(processedTokens.toArray(new String[0]));
     }
 
     /**
