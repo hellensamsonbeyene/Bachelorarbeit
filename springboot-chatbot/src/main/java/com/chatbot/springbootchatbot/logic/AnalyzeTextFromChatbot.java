@@ -4,6 +4,7 @@ import opennlp.tools.tokenize.Tokenizer;
 import opennlp.tools.tokenize.TokenizerME;
 import opennlp.tools.tokenize.TokenizerModel;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,7 +20,11 @@ public class AnalyzeTextFromChatbot {
     static Tokenizer tokenizer;
 
     static {
-        try (InputStream modelIn = new FileInputStream("springboot-chatbot/src/main/resources/opennlp-de-ud-gsd-tokens-1.0-1.9.3.bin")) {
+        initializeTokenizer();
+    }
+
+    static void initializeTokenizer() {
+        try (InputStream modelIn = new FileInputStream(new File("src/main/resources/opennlp-de-ud-gsd-tokens-1.0-1.9.3.bin").getAbsolutePath())) {
             TokenizerModel model = new TokenizerModel(modelIn);
             tokenizer = new TokenizerME(model);
         } catch (IOException e) {
@@ -71,7 +76,7 @@ public class AnalyzeTextFromChatbot {
      * @param value   Der gesuchte Wert.
      * @return Der gefundene Eintrag oder null, falls kein Eintrag mit dem Wert gefunden wurde.
      */
-    private static <K, V> Map.Entry<K, V> getEntryByValue(List<Map.Entry<K, V>> entries, V value) {
+    static <K, V> Map.Entry<K, V> getEntryByValue(List<Map.Entry<K, V>> entries, V value) {
         for (Map.Entry<K, V> entry : entries) {
             if (entry.getValue().equals(value)) {
                 return entry;
