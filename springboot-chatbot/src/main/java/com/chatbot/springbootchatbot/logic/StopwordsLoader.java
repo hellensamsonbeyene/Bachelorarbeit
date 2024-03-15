@@ -71,6 +71,7 @@ public class StopwordsLoader {
             }
             errorMessage.deleteCharAt(errorMessage.length() - 1); // Remove last comma
             errorMessage.deleteCharAt(errorMessage.length() - 1); // Remove space
+            CustomEntitiesLoader.deleteFile(CustomEntitiesLoader.testFilePath); // delete testfile
             throw new IOException(errorMessage.toString());
         }
     }
