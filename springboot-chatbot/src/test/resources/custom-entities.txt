@@ -1,5 +1,5 @@
 #Standardnachricht
-Entschuldigung, das habe ich nicht verstanden.
+Das habe ich leider nicht verstanden
 
 #Entitäten
 Vorlesung : Besuchen Sie interessante Vorlesungen zu verschiedenen Fachgebieten.
