@@ -19,10 +19,9 @@ import java.util.AbstractMap;
  */
 @Component
 public class CustomEntitiesLoader {
-    private static final String filePath = "springboot-chatbot/src/main/resources/custom-entities.txt";
-    public static final String initialFilePath = "springboot-chatbot/src/main/resources/example-entities.txt";
+    public static String initialFilePath = "src/main/resources/example-entities.txt";
 
-    public static final String testFilePath = "springboot-chatbot/src/main/resources/test-entities.txt";
+    public static String testFilePath = "src/main/resources/test-entities.txt";
 
     public static List<Map.Entry<String, String>> customEntities;
     public static String standardMessage;
@@ -43,13 +42,12 @@ public class CustomEntitiesLoader {
     @PostConstruct
     public ResponseEntity<String> init() throws IOException {
         //Überprüfen, ob Stoppwörter in den Entitäten existieren
-        customEntities = loadCustomEntities(initialFilePath);
-        standardMessage = loadStandardMessage(initialFilePath);
+        customEntities = loadCustomEntities(new File(initialFilePath).getAbsolutePath());
+        standardMessage = loadStandardMessage(new File(initialFilePath).getAbsolutePath());
 
         if (customEntities == null || standardMessage == null) {
             return new ResponseEntity<>("Die Liste der benutzerdefinierten Entitäten oder die Standardnachricht ist leer oder die Datei existiert nicht.", HttpStatus.INTERNAL_SERVER_ERROR);
-        } else {
-            for (Map.Entry<String, String> entry : customEntities) {
+        } else {for (Map.Entry<String, String> entry : customEntities) {
                 System.out.println("Benutzerdefinierte Entität: " + entry.getKey() + ", Satz: " + entry.getValue());
             }
         }
@@ -74,25 +72,27 @@ public class CustomEntitiesLoader {
      * @return ResponseEntity
      */
     public static ResponseEntity<String> uploadFile(MultipartFile file) {
+       String testFileAbsolutePath = new File(testFilePath).getAbsolutePath();
         try {
             if (file.isEmpty()) {
                 return new ResponseEntity<>("Die hochgeladene Datei ist leer.", HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            saveFile(testFilePath, file);
-            List<Map.Entry<String, String>> loadedCustomEntities = loadCustomEntities(testFilePath);
-            String loadedStandardMessage = loadStandardMessage(testFilePath);
+            saveFile(testFileAbsolutePath, file);
+            List<Map.Entry<String, String>> loadedCustomEntities = loadCustomEntities(testFileAbsolutePath);
+            String loadedStandardMessage = loadStandardMessage(testFileAbsolutePath);
 
             if (loadedCustomEntities ==null || loadedStandardMessage==null) {
-                deleteFile(testFilePath);
+                deleteFile(testFileAbsolutePath);
                 return new ResponseEntity<>("Die Standardnachricht oder die Entitäten sind leer. Bitte lade eine neue Datei hoch.", HttpStatus.INTERNAL_SERVER_ERROR);
             }
             //Überprüfen, ob Stoppwörter in den Entitäten existieren
             StopwordsLoader.checkForStopwords(loadedCustomEntities);
             // Wenn alles erfolgreich war, aktualisiere die Werte
-            boolean isDeleted = deleteFile(testFilePath);
+            boolean isDeleted = deleteFile(testFileAbsolutePath);
             if (isDeleted) {
                 System.out.println("Datei erfolgreich gelöscht.");
-                saveFile(filePath, file);
+                String filePath = "src/main/resources/custom-entities.txt";
+                saveFile(new File(filePath).getAbsolutePath(), file);
                 customEntities = loadedCustomEntities;
                 standardMessage = loadedStandardMessage;
             } else {
@@ -102,7 +102,6 @@ public class CustomEntitiesLoader {
             for (Map.Entry<String, String> entry : customEntities) {
                 System.out.println("Benutzerdefinierte Entität: " + entry.getKey() + ", Satz: " + entry.getValue());
             }
-
             return new ResponseEntity<>("Datei erfolgreich hochgeladen.", HttpStatus.OK);
         } catch (IOException e) {
             System.err.println("Fehler beim Hochladen der Datei: " + e.getMessage());
