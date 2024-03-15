@@ -13,7 +13,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CustomEntitiesLoaderTest {
-    private static final String CUSTOM_FILE_PATH = "src/main/resources/custom-entities.txt";
+    private static final String CUSTOM_FILE_PATH = "src/test/resources/custom-entities.txt";
 
     @Test
     void init_LoadsCustomEntitiesAndStandardMessage_Success() throws IOException {
