@@ -44,7 +44,7 @@ class ChatbotControllerTest {
     }
     @Test
     void resetChatbot_SuccessfullyResetsChatbot() throws Exception {
-        File file = new File("src/test/resources/custom-entities.txt");
+        File file = new File("src/test/resources/example-entities.txt");
         MockMultipartFile multipartFile = new MockMultipartFile(
                 "file",
                 "file.txt",
@@ -54,17 +54,16 @@ class ChatbotControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.multipart("/uploadFile")
                         .file(multipartFile))
                 .andExpect(MockMvcResultMatchers.status().isOk());
-        assertEquals("[vorlesung=Besuchen Sie interessante Vorlesungen zu verschiedenen Fachgebieten., professoren=Unsere erfahrenen Professoren stehen Ihnen für Fragen und Diskussionen zur Verfügung., professorin=Test1., bibliothek=Nutzen Sie unsere gut ausgestattete Bibliothek für Ihr Studium., studium=Erforschen Sie unsere vielfältigen Studiengänge und finden Sie den passenden für sich., studentenwohnheim=Informationen zu Unterkünften für Studierende., campus=Erkunden Sie unseren schönen Campus und seine Einrichtungen.]", CustomEntitiesLoader.customEntities.toString());
-        assertEquals("Das habe ich leider nicht verstanden", CustomEntitiesLoader.standardMessage);
+        assertEquals("[temperatur=Die aktuelle Temperatur in Berlin beträgt 20 Grad Celsius., wettervorhersage=Die Wettervorhersage für die nächsten Tage in Berlin sieht sonnig aus., niederschlag=In Berlin wird kein Niederschlag erwartet., wind=Der Wind in Berlin weht mit einer Geschwindigkeit von 15 km/h aus Richtung Nordwest.]", CustomEntitiesLoader.customEntities.toString());
+        assertEquals("Entschuldigung, das habe ich nicht verstanden.", CustomEntitiesLoader.standardMessage);
 
-        System.out.println(CustomEntitiesLoader.customEntities);
         mockMvc.perform(MockMvcRequestBuilders.post("/resetChatbot")
                         .contentType("application/json")
                         .content(""))
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
         assertEquals("Entschuldigung, das habe ich nicht verstanden.", CustomEntitiesLoader.standardMessage);
-        assertEquals("[temperatur=Die aktuelle Temperatur in Berlin beträgt 20 Grad Celsius., wettervorhersage=Die Wettervorhersage für die nächsten Tage in Berlin sieht sonnig aus., niederschlag=In Berlin wird kein Niederschlag erwartet., wind=Der Wind in Berlin weht mit einer Geschwindigkeit von 15 km/h aus Richtung Nordwest.]", CustomEntitiesLoader.customEntities.toString());
+        assertEquals("[vorlesung=Besuchen Sie interessante Vorlesungen zu verschiedenen Fachgebieten., professoren=Unsere erfahrenen Professoren stehen Ihnen für Fragen und Diskussionen zur Verfügung., professorin=Test1., bibliothek=Nutzen Sie unsere gut ausgestattete Bibliothek für Ihr Studium., studium=Erforschen Sie unsere vielfältigen Studiengänge und finden Sie den passenden für sich., studentenwohnheim=Informationen zu Unterkünften für Studierende., campus=Erkunden Sie unseren schönen Campus und seine Einrichtungen.]", CustomEntitiesLoader.customEntities.toString());
 
         System.out.println(CustomEntitiesLoader.customEntities);
     }
