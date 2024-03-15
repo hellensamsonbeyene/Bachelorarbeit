@@ -1,6 +1,7 @@
 package com.chatbot.springbootchatbot.logic;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
@@ -14,9 +15,9 @@ public class StopwordsLoader {
         stopwords = loadStopwords();
     }
 
-    private static Set<String> loadStopwords() {
+    static Set<String> loadStopwords() {
         Set<String> stopwords = new HashSet<>();
-        try (BufferedReader br = new BufferedReader(new FileReader("springboot-chatbot/src/main/resources/stopwords.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(new File("src/main/resources/stopwords.txt").getAbsolutePath()))) {
             String line;
             while ((line = br.readLine()) != null) {
                 stopwords.add(line.trim());
@@ -71,7 +72,7 @@ public class StopwordsLoader {
             }
             errorMessage.deleteCharAt(errorMessage.length() - 1); // Remove last comma
             errorMessage.deleteCharAt(errorMessage.length() - 1); // Remove space
-            CustomEntitiesLoader.deleteFile(CustomEntitiesLoader.testFilePath); // delete testfile
+            CustomEntitiesLoader.deleteFile(new File(CustomEntitiesLoader.testFilePath).getAbsolutePath()); // delete testfile
             throw new IOException(errorMessage.toString());
         }
     }
