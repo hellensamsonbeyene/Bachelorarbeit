@@ -7,6 +7,7 @@ import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
@@ -99,5 +100,34 @@ class CustomEntitiesLoaderTest {
 
         ResponseEntity<String> responseEntity = CustomEntitiesLoader.uploadFile(file);
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
+    }
+    @Test
+    void loadCustomEntities_LoadsEntitiesFromFile() throws IOException {
+        // Arrange
+        String filePath = "src/test/resources/custom-entities.txt";
+
+        // Act
+        List<Map.Entry<String, String>> customEntities = CustomEntitiesLoader.loadCustomEntities(new File(filePath).getAbsolutePath());
+
+        // Assert
+        assertNotNull(customEntities);
+        assertEquals(7, customEntities.size()); // Assume there are two entities in the test file
+
+        // You may further assert specific entries if needed
+        assertEquals(new AbstractMap.SimpleEntry<>("vorlesung", "Besuchen Sie interessante Vorlesungen zu verschiedenen Fachgebieten."), customEntities.get(0));
+        assertEquals(new AbstractMap.SimpleEntry<>("professoren", "Unsere erfahrenen Professoren stehen Ihnen für Fragen und Diskussionen zur Verfügung."), customEntities.get(1));
+    }
+
+    @Test
+    void init_InitializesCustomEntitiesAndOutputs() throws IOException {
+        CustomEntitiesLoader customEntitiesLoader = new CustomEntitiesLoader();
+        // Arrange & Act
+        ResponseEntity<String> response = customEntitiesLoader.init();
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        // Assuming that the loaded entities and standard message are printed in the console
+        // You can use mocking libraries to verify console output if needed
     }
 }

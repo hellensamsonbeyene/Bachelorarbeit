@@ -87,6 +87,7 @@ public class CustomEntitiesLoader {
             }
             //Überprüfen, ob Stoppwörter in den Entitäten existieren
             StopwordsLoader.checkForStopwords(loadedCustomEntities);
+            System.out.println(loadedCustomEntities + "loaded custom entities" + loadedStandardMessage );
             // Wenn alles erfolgreich war, aktualisiere die Werte
             boolean isDeleted = deleteFile(testFileAbsolutePath);
             if (isDeleted) {
