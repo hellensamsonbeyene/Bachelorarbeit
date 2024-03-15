@@ -22,6 +22,8 @@ public class CustomEntitiesLoader {
     private static final String filePath = "springboot-chatbot/src/main/resources/custom-entities.txt";
     public static final String initialFilePath = "springboot-chatbot/src/main/resources/example-entities.txt";
 
+    public static final String testFilePath = "springboot-chatbot/src/main/resources/test-entities.txt";
+
     public static List<Map.Entry<String, String>> customEntities;
     public static String standardMessage;
 
@@ -55,6 +57,17 @@ public class CustomEntitiesLoader {
     }
 
     /**
+     * Löscht die Datei mit dem angegebenen Dateipfad.
+     *
+     * @param filePath Der Dateipfad der zu löschenden Datei.
+     * @return true, wenn die Datei erfolgreich gelöscht wurde, ansonsten false.
+     */
+    public static boolean deleteFile(String filePath) {
+        File fileToDelete = new File(filePath);
+        return fileToDelete.delete();
+    }
+
+    /**
      * Hochladen einer Datei, Speichern und erneuten Laden von benutzerdefinierten Entitäten und der Standardnachricht.
      *
      * @param file Die hochzuladende Datei.
@@ -65,18 +78,26 @@ public class CustomEntitiesLoader {
             if (file.isEmpty()) {
                 return new ResponseEntity<>("Die hochgeladene Datei ist leer.", HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            saveFile(filePath, file);
-            List<Map.Entry<String, String>> loadedCustomEntities = loadCustomEntities(filePath);
-            String loadedStandardMessage = loadStandardMessage(filePath);
+            saveFile(testFilePath, file);
+            List<Map.Entry<String, String>> loadedCustomEntities = loadCustomEntities(testFilePath);
+            String loadedStandardMessage = loadStandardMessage(testFilePath);
 
             if (loadedCustomEntities ==null || loadedStandardMessage==null) {
+                deleteFile(testFilePath);
                 return new ResponseEntity<>("Die Standardnachricht oder die Entitäten sind leer. Bitte lade eine neue Datei hoch.", HttpStatus.INTERNAL_SERVER_ERROR);
             }
             //Überprüfen, ob Stoppwörter in den Entitäten existieren
             StopwordsLoader.checkForStopwords(loadedCustomEntities);
             // Wenn alles erfolgreich war, aktualisiere die Werte
-            customEntities = loadedCustomEntities;
-            standardMessage = loadedStandardMessage;
+            boolean isDeleted = deleteFile(testFilePath);
+            if (isDeleted) {
+                System.out.println("Datei erfolgreich gelöscht.");
+                saveFile(filePath, file);
+                customEntities = loadedCustomEntities;
+                standardMessage = loadedStandardMessage;
+            } else {
+                return new ResponseEntity<>("Es ist ein Fehler aufgetreten, bitte lade eine neue Datei hoch.", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
 
             for (Map.Entry<String, String> entry : customEntities) {
                 System.out.println("Benutzerdefinierte Entität: " + entry.getKey() + ", Satz: " + entry.getValue());
