@@ -19,9 +19,12 @@ import java.util.AbstractMap;
  */
 @Component
 public class CustomEntitiesLoader {
-    public static String initialFilePath = "src/main/resources/example-entities.txt";
 
-    public static String testFilePath = "src/main/resources/test-entities.txt";
+    public static String filePath = "springboot-chatbot/src/main/resources/custom-entities.txt";
+
+    public static String initialFilePath = "springboot-chatbot/src/main/resources/example-entities.txt";
+
+    public static String testFilePath = "springboot-chatbot/src/main/resources/test-entities.txt";
 
     public static List<Map.Entry<String, String>> customEntities;
     public static String standardMessage;
@@ -40,8 +43,7 @@ public class CustomEntitiesLoader {
      * @return ResponseEntity
      */
     @PostConstruct
-    public ResponseEntity<String> init() throws IOException {
-        //Überprüfen, ob Stoppwörter in den Entitäten existieren
+    public static ResponseEntity<String> init() throws IOException {
         customEntities = loadCustomEntities(new File(initialFilePath).getAbsolutePath());
         standardMessage = loadStandardMessage(new File(initialFilePath).getAbsolutePath());
 
@@ -92,7 +94,6 @@ public class CustomEntitiesLoader {
             boolean isDeleted = deleteFile(testFileAbsolutePath);
             if (isDeleted) {
                 System.out.println("Datei erfolgreich gelöscht.");
-                String filePath = "src/main/resources/custom-entities.txt";
                 saveFile(new File(filePath).getAbsolutePath(), file);
                 customEntities = loadedCustomEntities;
                 standardMessage = loadedStandardMessage;

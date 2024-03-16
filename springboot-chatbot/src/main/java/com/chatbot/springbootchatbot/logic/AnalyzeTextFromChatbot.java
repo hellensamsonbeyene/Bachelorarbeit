@@ -4,10 +4,7 @@ import opennlp.tools.tokenize.Tokenizer;
 import opennlp.tools.tokenize.TokenizerME;
 import opennlp.tools.tokenize.TokenizerModel;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -18,13 +15,17 @@ import java.util.Map;
 public class AnalyzeTextFromChatbot {
 
     static Tokenizer tokenizer;
+    static String tokenizerPath = "/opennlp-de-ud-gsd-tokens-1.0-1.9.3.bin";
 
     static {
-        initializeTokenizer();
+        init();
     }
 
-    static void initializeTokenizer() {
-        try (InputStream modelIn = new FileInputStream(new File("src/main/resources/opennlp-de-ud-gsd-tokens-1.0-1.9.3.bin").getAbsolutePath())) {
+    private static void init() {
+        try (InputStream modelIn = AnalyzeTextFromChatbot.class.getResourceAsStream(tokenizerPath)) {
+            if (modelIn == null) {
+                throw new FileNotFoundException("Tokenizer Datei nicht gefunden " + tokenizerPath);
+            }
             TokenizerModel model = new TokenizerModel(modelIn);
             tokenizer = new TokenizerME(model);
         } catch (IOException e) {

@@ -1,5 +1,6 @@
 package com.chatbot.springbootchatbot.logic;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,12 +14,17 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CustomEntitiesLoaderTest {
-    private static final String CUSTOM_FILE_PATH = "src/test/resources/custom-entities.txt";
 
+    @BeforeAll
+    static void init(){
+        CustomEntitiesLoader.initialFilePath = "src/test/resources/custom-entities.txt";
+        CustomEntitiesLoader.testFilePath = "src/test/resources/test-entities.txt";
+        CustomEntitiesLoader.filePath = "src/test/resources/custom-entities.txt";
+
+    }
     @Test
     void init_LoadsCustomEntitiesAndStandardMessage_Success() throws IOException {
-        CustomEntitiesLoader customEntitiesLoader = new CustomEntitiesLoader();
-        ResponseEntity<String> responseEntity = customEntitiesLoader.init();
+        ResponseEntity<String> responseEntity = CustomEntitiesLoader.init();
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertNotNull(CustomEntitiesLoader.getCustomEntities());
         assertNotNull(CustomEntitiesLoader.getStandardMessage());
@@ -26,16 +32,14 @@ class CustomEntitiesLoaderTest {
 
     @Test
     void init_CustomEntitiesFileNotFound_ReturnsInternalServerError() throws IOException {
-        CustomEntitiesLoader customEntitiesLoader = new CustomEntitiesLoader();
         CustomEntitiesLoader.initialFilePath = "non_existing_file.txt";
-        ResponseEntity<String> responseEntity = customEntitiesLoader.init();
 
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, CustomEntitiesLoader.init().getStatusCode());
     }
 
     @Test
     void loadCustomEntities_LoadsCustomEntitiesFromFile_Success() throws IOException {
-        List<Map.Entry<String, String>> customEntities = CustomEntitiesLoader.loadCustomEntities(new File(CUSTOM_FILE_PATH).getAbsolutePath());
+        List<Map.Entry<String, String>> customEntities = CustomEntitiesLoader.loadCustomEntities(new File(CustomEntitiesLoader.filePath).getAbsolutePath());
 
         assertNotNull(customEntities);
         assertFalse(customEntities.isEmpty());
@@ -43,10 +47,21 @@ class CustomEntitiesLoaderTest {
 
     @Test
     void loadStandardMessage_LoadsStandardMessageFromFile_Success() {
-        String standardMessage = CustomEntitiesLoader.loadStandardMessage(new File(CUSTOM_FILE_PATH).getAbsolutePath());
+        String standardMessage = CustomEntitiesLoader.loadStandardMessage(new File(CustomEntitiesLoader.filePath).getAbsolutePath());
 
         assertNotNull(standardMessage);
         assertFalse(standardMessage.isEmpty());
+    }
+    @Test
+    void loadCustomEntities_LoadsEntitiesFromFile() throws IOException {
+        CustomEntitiesLoader.filePath = "src/test/resources/university-entities.txt";
+        List<Map.Entry<String, String>> customEntities = CustomEntitiesLoader.loadCustomEntities(new File(CustomEntitiesLoader.filePath).getAbsolutePath());
+
+        assertNotNull(customEntities);
+        assertEquals(7, customEntities.size());
+
+        assertEquals(new AbstractMap.SimpleEntry<>("vorlesung", "Besuchen Sie interessante Vorlesungen zu verschiedenen Fachgebieten."), customEntities.get(0));
+        assertEquals(new AbstractMap.SimpleEntry<>("professoren", "Unsere erfahrenen Professoren stehen Ihnen für Fragen und Diskussionen zur Verfügung."), customEntities.get(1));
     }
 
     @Test
@@ -56,7 +71,6 @@ class CustomEntitiesLoaderTest {
         MockMultipartFile file = new MockMultipartFile("file", "custom-entities.txt", "text/plain", "#Standardnachricht\n Sentence\n\n#Entitäten\n entity:sentence.".getBytes());
 
         ResponseEntity<String> responseEntity = CustomEntitiesLoader.uploadFile(file);
-        System.out.println("test"+ responseEntity);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertNotNull(CustomEntitiesLoader.getCustomEntities());
         assertNotNull(CustomEntitiesLoader.getStandardMessage());
@@ -95,39 +109,16 @@ class CustomEntitiesLoaderTest {
 
     @Test
     void uploadFile_IOException_ReturnsInternalServerError() {
-        // Erstellen Sie ein Mock-MultipartFile-Objekt, das leer ist
         MockMultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", new byte[0]);
 
         ResponseEntity<String> responseEntity = CustomEntitiesLoader.uploadFile(file);
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
     }
-    @Test
-    void loadCustomEntities_LoadsEntitiesFromFile() throws IOException {
-        // Arrange
-        String filePath = "src/test/resources/custom-entities.txt";
-
-        // Act
-        List<Map.Entry<String, String>> customEntities = CustomEntitiesLoader.loadCustomEntities(new File(filePath).getAbsolutePath());
-
-        // Assert
-        assertNotNull(customEntities);
-        assertEquals(7, customEntities.size()); // Assume there are two entities in the test file
-
-        // You may further assert specific entries if needed
-        assertEquals(new AbstractMap.SimpleEntry<>("vorlesung", "Besuchen Sie interessante Vorlesungen zu verschiedenen Fachgebieten."), customEntities.get(0));
-        assertEquals(new AbstractMap.SimpleEntry<>("professoren", "Unsere erfahrenen Professoren stehen Ihnen für Fragen und Diskussionen zur Verfügung."), customEntities.get(1));
-    }
 
     @Test
     void init_InitializesCustomEntitiesAndOutputs() throws IOException {
-        CustomEntitiesLoader customEntitiesLoader = new CustomEntitiesLoader();
-        // Arrange & Act
-        ResponseEntity<String> response = customEntitiesLoader.init();
+        ResponseEntity<String> response = CustomEntitiesLoader.init();
 
-        // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
-
-        // Assuming that the loaded entities and standard message are printed in the console
-        // You can use mocking libraries to verify console output if needed
     }
 }

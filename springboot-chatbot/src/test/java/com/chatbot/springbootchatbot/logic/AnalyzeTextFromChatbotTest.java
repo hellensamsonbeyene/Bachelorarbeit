@@ -2,6 +2,7 @@ package com.chatbot.springbootchatbot.logic;
 
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -13,7 +14,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class AnalyzeTextFromChatbotTest {
-    @Test
+
+    @BeforeAll
+    static void init(){
+        CustomEntitiesLoader.initialFilePath = "src/test/resources/university-entities.txt";
+
+    }
+
+   @Test
     void analyzeUserInput_ReturnsStandardMessageWhenNoEntitiesFound() {
         String userInput = "Test input";
         String result = AnalyzeTextFromChatbot.analyzeUserInput(userInput);

@@ -1,14 +1,13 @@
 package com.chatbot.springbootchatbot.logic;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class StopwordsLoader {
 
     private static final Set<String> stopwords;
+
+    public static String filePath = "/stopwords.txt";
 
     static {
         // Stopwörter einmalig beim Starten der Klasse laden
@@ -17,10 +16,13 @@ public class StopwordsLoader {
 
     static Set<String> loadStopwords() {
         Set<String> stopwords = new HashSet<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(new File("src/main/resources/stopwords.txt").getAbsolutePath()))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                stopwords.add(line.trim());
+        try (InputStream inputStream = StopwordsLoader.class.getResourceAsStream(filePath)) {
+            assert inputStream != null;
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    stopwords.add(line.trim());
+                }
             }
         } catch (IOException e) {
             System.err.println("Fehler beim Laden der Stoppwörter: " + e.getMessage());
