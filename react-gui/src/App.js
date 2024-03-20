@@ -7,7 +7,6 @@ import "./styling/styles.css";
 import MainPage from "./domain/mainPage/MainPage";
 
 const App = () => {
-
   return(
       <React.Fragment>
         <Router>
@@ -19,7 +18,6 @@ const App = () => {
         </Router>
       </React.Fragment>
   );
-
 }
 
 export default App;
