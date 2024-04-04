@@ -1,17 +1,11 @@
-import React, {useEffect, useRef, useState} from 'react';
-//mui
-import {
-    Paper,
-    Typography,
-    TextField,
-    Button,
-} from '@mui/material';
+import React, { useEffect, useRef, useState } from 'react';
+// mui
+import { Paper, Typography, TextField, Button } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
-//custom
-import ChatbotService from "../../services/ChatbotService";
-import {Message} from "../../models/Message";
-import CustomTooltip from "../customComponents/Tooltip";
+// custom
+import ChatbotService from '../../services/ChatbotService';
+import CustomTooltip from '../customComponents/Tooltip';
 
 /**
  *  visueller Chatbotbereich
@@ -44,23 +38,23 @@ const VisualChatbot = ({theme, setShowPopUp, setPopUpMessage, setColorPopUp}) =>
     function handleUserInput() {
         if (charCount >= maxChars){
             setShowPopUp(true);
-            setColorPopUp("error");
-            setPopUpMessage("Zu viele Zeichen. Bitte kürzen Sie Ihre Nachricht.");
-        }else {
-            const request: Message = {userInput: userInput};
+            setColorPopUp('error');
+            setPopUpMessage('Zu viele Zeichen. Bitte kürzen Sie Ihre Nachricht.');
+        } else {
+            const request = { userInput: userInput };
             ChatbotService.analyzePost(request)
                 .then((response) => {
                     setMessages((prevMessages) => [
                         ...prevMessages,
-                        {role: 'user', content: userInput},
-                        {role: 'bot', content: response},
+                        { role: 'user', content: userInput },
+                        { role: 'bot', content: response },
                     ]);
                     setCharCount(0);
                     setUserInput('');
                 })
                 .catch((error) => {
                     setShowPopUp(true);
-                    setColorPopUp("error");
+                    setColorPopUp('error');
                     setPopUpMessage(error.response.data);
                 });
         }
@@ -68,16 +62,16 @@ const VisualChatbot = ({theme, setShowPopUp, setPopUpMessage, setColorPopUp}) =>
 
     const renderAvatar = (role) => {
         if (role === 'user') {
-            return <PersonIcon fontSize="large"/>;
+            return <PersonIcon fontSize="large" />;
         } else if (role === 'bot') {
-            return <SupportAgentIcon fontSize="large"/>;
+            return <SupportAgentIcon fontSize="large" />;
         }
         return null;
     };
 
     return (
-        <div style={{width:'600px', margin: 'auto', padding: '20px', borderRadius: '10px', boxShadow: '0 0 10px rgba(0,0,0,0.1)', backgroundColor: theme.primary}}>
-            <Typography variant="h5" gutterBottom style={{ textAlign: 'center', color:'#ffff' }}>
+        <div style={{ width: '600px', margin: 'auto', padding: '20px', borderRadius: '10px', boxShadow: '0 0 10px rgba(0,0,0,0.1)', backgroundColor: theme.primary }}>
+            <Typography variant="h5" gutterBottom style={{ textAlign: 'center', color: '#ffff' }}>
                 Chatbot
             </Typography>
             <div
@@ -92,7 +86,7 @@ const VisualChatbot = ({theme, setShowPopUp, setPopUpMessage, setColorPopUp}) =>
                     flexWrap: 'wrap'
                 }}
             >
-                <div style={{padding: '10px', display: 'flex', flexDirection: 'column'}}>
+                <div style={{ padding: '10px', display: 'flex', flexDirection: 'column' }}>
                     {messages.map((message, index) => (
                         <div key={index} style={{
                             display: 'flex',
@@ -101,7 +95,7 @@ const VisualChatbot = ({theme, setShowPopUp, setPopUpMessage, setColorPopUp}) =>
                             justifyContent: message.role === 'user' ? 'flex-end' : 'flex-start', // Diese Zeile wurde angepasst
                         }}>
                             {message.role === 'bot' && (
-                                <div style={{marginRight: '10px'}}>
+                                <div style={{ marginRight: '10px' }}>
                                     {renderAvatar(message.role)}
                                 </div>
                             )}
@@ -121,7 +115,7 @@ const VisualChatbot = ({theme, setShowPopUp, setPopUpMessage, setColorPopUp}) =>
                                 {message.content}
                             </Paper>
                             {message.role === 'user' && (
-                                <div style={{marginLeft: '10px'}}>
+                                <div style={{ marginLeft: '10px' }}>
                                     {renderAvatar(message.role)}
                                 </div>
                             )}
@@ -130,8 +124,8 @@ const VisualChatbot = ({theme, setShowPopUp, setPopUpMessage, setColorPopUp}) =>
                     <div ref={messagesEndRef} />
                 </div>
             </div>
-            <div style={{display: 'flex', alignItems: 'start'}}>
-                <div style={{display: 'flex', flexDirection: 'column', flexGrow: 1}} ref={inputRef}>
+            <div style={{ display: 'flex', alignItems: 'start' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }} ref={inputRef}>
                     <CustomTooltip title="Hier Nachricht schreiben">
                         <TextField
                             multiline

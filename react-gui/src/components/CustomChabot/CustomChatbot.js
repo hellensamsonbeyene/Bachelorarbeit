@@ -25,11 +25,6 @@ const CustomChatbot = ({theme, setShowPopUp, setPopUpMessage, setColorPopUp}) =>
                 setShowPopUp(true);
                 setColorPopUp("success");
                 setPopUpMessage("Chatbot erfolgreich zurückgesetzt!");
-            })
-            .catch(error => {
-                setShowPopUp(true);
-                setColorPopUp("success");
-                setPopUpMessage("Fehler beim Zurücksetzen des Chatbots:", error);
             });
     };
 
