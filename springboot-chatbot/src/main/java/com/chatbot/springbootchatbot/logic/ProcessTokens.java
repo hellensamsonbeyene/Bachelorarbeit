@@ -8,15 +8,15 @@ import java.util.Map;
  * Die Klasse ProcessTokens verarbeitet die Tokens und ersetzt sie ggf. durch die nächstgelegene Entität, falls die Levenshtein-Distanz ≤ 3 ist.
  */
 public class ProcessTokens {
+    static List<Map.Entry<String, String>> customEntities = CustomEntitiesLoader.getCustomEntities();
 
     /**
      * Verarbeitet die Tokens und ersetzt sie durch die nächstgelegene Entität, falls die Levenshtein-Distanz kleiner oder gleich 3 ist.
      *
-     * @param tokens         Ein Array von Tokens, das verarbeitet werden soll.
-     * @param customEntities Eine Liste von benutzerdefinierten Entitäten.
+     * @param tokens  Ein Array von Tokens, das verarbeitet werden soll.
      * @return Ein Array von verarbeiteten Tokens.
      */
-    public static String[] processTokens(String[] tokens, List<Map.Entry<String, String>> customEntities) {
+    public static String[] processTokens(String[] tokens) {
         List<String> processedTokens = new ArrayList<>();
         for (String token : tokens) {
             String closestEntity = null;

@@ -3,7 +3,6 @@ package com.chatbot.springbootchatbot.logic;
 import org.junit.jupiter.api.Test;
 import java.util.AbstractMap;
 import java.util.List;
-import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -12,20 +11,20 @@ class ProcessTokensTest {
     @Test
     void processTokens_NoCustomEntities_ReturnsOriginalTokens() {
         String[] tokens = {"word1", "word2", "word3"};
-        List<Map.Entry<String, String>> customEntities = List.of();
+        ProcessTokens.customEntities = List.of();
         String[] expected = {"word1", "word2", "word3"};
-        assertArrayEquals(expected, ProcessTokens.processTokens(tokens, customEntities));
+        assertArrayEquals(expected, ProcessTokens.processTokens(tokens));
     }
 
     @Test
     void processTokens_WithCustomEntities_ReplacesTokensWithClosestEntity() {
         String[] tokens = {"cat", "dog", "rabit"};
-        List<Map.Entry<String, String>> customEntities = List.of(
+        ProcessTokens.customEntities = List.of(
                 new AbstractMap.SimpleEntry<>("dog", "animal"),
                 new AbstractMap.SimpleEntry<>("rabbit", "animal")
         );
         String[] expected = {"cat", "dog", "rabbit"};
-        assertArrayEquals(expected, ProcessTokens.processTokens(tokens, customEntities));
+        assertArrayEquals(expected, ProcessTokens.processTokens(tokens));
     }
 
     @Test

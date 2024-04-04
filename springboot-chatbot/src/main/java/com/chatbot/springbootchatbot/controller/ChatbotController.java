@@ -23,14 +23,14 @@ public class ChatbotController {
     /**
      * Analysiert die Benutzereingabe und gibt eine Antwort zurück.
      *
-     * @param userInputMessage Die Benutzereingabemeldung, die im HTTP-body empfangen wird.
+     * @param userInput Die Benutzereingabemeldung, die im HTTP-body empfangen wird.
      * @return Die durch die Analyse der Benutzereingabe generierte Antwort.
      */
     @PostMapping("/analyze")
-    public String analyzeText(@RequestBody UserInputMessage userInputMessage) {
-        String userInput = userInputMessage.userInput();
+    public String analyzeText(@RequestBody UserInputMessage userInput) {
+        String userInputMessage = userInput.userInput();
 
-        return AnalyzeTextFromChatbot.analyzeUserInput(userInput);
+        return AnalyzeTextFromChatbot.analyzeUserInput(userInputMessage);
     }
 
     /**

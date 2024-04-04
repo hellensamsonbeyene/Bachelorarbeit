@@ -20,6 +20,8 @@ public class AnalyzeTextFromChatbot {
     static {
         init();
     }
+    static List<Map.Entry<String, String>> customEntities = CustomEntitiesLoader.getCustomEntities();
+
 
     private static void init() {
         try (InputStream modelIn = AnalyzeTextFromChatbot.class.getResourceAsStream(tokenizerPath)) {
@@ -37,16 +39,23 @@ public class AnalyzeTextFromChatbot {
      * Analysiert die Benutzereingabe und gibt den Satz der höchst priorisierten erkannten Entität zurück.
      *
      * @param userInput Die Eingabe des Benutzers, die analysiert werden soll.
-     * @return Der Satz der höchst priorisierten erkannten Entität oder die Standardnachricht, falls keine Entität erkannt wurde.
+     * @return Das Ergebnis von checkForEntities()
      */
     public static String analyzeUserInput(String userInput) {
 
-        List<Map.Entry<String, String>> customEntities = CustomEntitiesLoader.getCustomEntities();
         String[] tokens = tokenizer.tokenize(userInput);
-        String highestPrioritySentence = null;
-        //Prüfen der Rechtschreibung der Tokens und Filtern der Stoppwörter
-        String[] processedTokens = ProcessTokens.processTokens(tokens,customEntities);
+        String[] processedTokens = ProcessTokens.processTokens(tokens);
         System.out.println("Processed Tokens: " + Arrays.toString(processedTokens));
+        return checkForEntities(processedTokens);
+    }
+
+    /**
+     * Analysiert die Tokens und gibt den Satz der höchst priorisierten erkannten Entität zurück.
+     * @param processedTokens Die gefilterten und korrigierten Tokens des UserInputs
+     * @return Der Satz der höchst priorisierten erkannten Entität oder die Standardnachricht, falls keine Entität erkannt wurde.
+     */
+    public static String checkForEntities(String[] processedTokens) {
+        String highestPrioritySentence = null;
         // Durchlaufen der Tokens und benutzerdefinierten Entitäten
         for (String token : processedTokens) {
             for (Map.Entry<String, String> entry : customEntities) {
