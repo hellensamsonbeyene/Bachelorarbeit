@@ -13,7 +13,7 @@ class ProcessTokensTest {
         String[] tokens = {"word1", "word2", "word3"};
         ProcessTokens.customEntities = List.of();
         String[] expected = {"word1", "word2", "word3"};
-        assertArrayEquals(expected, ProcessTokens.processTokens(tokens));
+        assertArrayEquals(expected, ProcessTokens.spellCheckTokens(tokens));
     }
 
     @Test
@@ -24,7 +24,7 @@ class ProcessTokensTest {
                 new AbstractMap.SimpleEntry<>("rabbit", "animal")
         );
         String[] expected = {"cat", "dog", "rabbit"};
-        assertArrayEquals(expected, ProcessTokens.processTokens(tokens));
+        assertArrayEquals(expected, ProcessTokens.spellCheckTokens(tokens));
     }
 
     @Test
