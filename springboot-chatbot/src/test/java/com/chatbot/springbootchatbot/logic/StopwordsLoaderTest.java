@@ -14,7 +14,7 @@ public class StopwordsLoaderTest {
     void cleanTokens_RemovesStopwords() {
         String[] tokens = {"Das", "ist", "ein", "Test", "mit", "Stoppwörtern"};
         String[] expected = {"Test", "Stoppwörtern"};
-        String[] cleanedTokens = StopwordsLoader.cleanTokens(tokens);
+        String[] cleanedTokens = StopwordsLoader.filterStopwords(tokens);
         assertArrayEquals(expected, cleanedTokens);
     }
 
@@ -71,7 +71,7 @@ public class StopwordsLoaderTest {
     void cleanTokens_NoStopwords_ReturnsOriginalTokens() {
         String[] tokens = {"no", "stopwords", "here"};
         String[] expected = {"no", "stopwords", "here"};
-        String[] cleanedTokens = StopwordsLoader.cleanTokens(tokens);
+        String[] cleanedTokens = StopwordsLoader.filterStopwords(tokens);
         assertArrayEquals(expected, cleanedTokens);
     }
 }

@@ -44,7 +44,7 @@ public class AnalyzeTextFromChatbot {
     public static String analyzeUserInput(String userInput) {
 
         String[] tokens = tokenizer.tokenize(userInput);
-        String[] processedTokens = ProcessTokens.processTokens(tokens);
+        String[] processedTokens = ProcessTokens.spellCheckTokens(tokens);
         System.out.println("Processed Tokens: " + Arrays.toString(processedTokens));
         return checkForEntities(processedTokens);
     }

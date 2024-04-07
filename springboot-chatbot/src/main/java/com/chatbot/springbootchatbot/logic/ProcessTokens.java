@@ -16,7 +16,7 @@ public class ProcessTokens {
      * @param tokens  Ein Array von Tokens, das verarbeitet werden soll.
      * @return Ein Array von verarbeiteten Tokens.
      */
-    public static String[] processTokens(String[] tokens) {
+    public static String[] spellCheckTokens(String[] tokens) {
         List<String> processedTokens = new ArrayList<>();
         for (String token : tokens) {
             String closestEntity = null;
@@ -41,7 +41,7 @@ public class ProcessTokens {
             }
         }
         //Filtern der Stopwörter aus den Tokens
-        return StopwordsLoader.cleanTokens(processedTokens.toArray(new String[0]));
+        return StopwordsLoader.filterStopwords(processedTokens.toArray(new String[0]));
     }
 
     /**

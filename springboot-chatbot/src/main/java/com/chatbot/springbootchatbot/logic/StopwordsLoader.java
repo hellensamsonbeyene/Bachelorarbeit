@@ -36,7 +36,7 @@ public class StopwordsLoader {
      * @param tokens Ein Array von Tokens, das bereinigt werden soll.
      * @return Ein bereinigtes Array von Tokens ohne Stopwörter.
      */
-    public static String[] cleanTokens(String[] tokens) {
+    public static String[] filterStopwords(String[] tokens) {
         List<String> cleanedTokens = new ArrayList<>();
 
         for (String token : tokens) {
