@@ -108,6 +108,9 @@ const FileDropArea = ({ setShowPopUp, setPopUpMessage, setColorPopUp }) => {
                 style={{ display: 'none' }}
                 ref={fileInputRef}
                 onChange={handleFileInput}
+                onClick={(event)=> {
+                    event.target.value = null
+                }}
             />
         </div>
         </CustomTooltip>
