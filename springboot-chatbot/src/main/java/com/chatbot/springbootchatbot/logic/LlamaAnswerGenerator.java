@@ -17,7 +17,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class LlamaAnswerGenerator {
     private static final String API_URL = "https://api.llama-api.com/chat/completions";
-    private static final String BEARER_TOKEN = "LL-dRur7QTWyKhXtQXECcMvQ9WX8393jJhEQvKMmLXrrDSM603B9P7gEJVcOeHgM4S3";
+    private static final String BEARER_TOKEN = "LL-dRur7QTWyKhXtQXECcMvQ9WX8393jJhEQvKMmLXrrDSM603B9P7gEJVcOeHgM4S3"; //TODO delete this later
 
     /*
      * Hilfsmethode zum Finden eines Eintrags in einer Liste von Einträgen anhand des Werts.
