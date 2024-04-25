@@ -18,6 +18,7 @@ const HowToChatbot = () => {
       </pre>
             <div className="how-to-step">
         <span className="bold-text">
+          Entitäten sind Wörter, die dein Chatbot in den Nachrichten erkennen soll. Sie dürfen keine Leerzeichen besitzen!
           Die Entitäten werden absteigend priorisiert, also achte auf die Reihenfolge deiner Entitäten!
         </span>
             </div>
