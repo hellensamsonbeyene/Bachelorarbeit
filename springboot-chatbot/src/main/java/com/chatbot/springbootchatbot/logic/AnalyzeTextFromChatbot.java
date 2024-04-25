@@ -46,15 +46,16 @@ public class AnalyzeTextFromChatbot {
         String[] tokens = tokenizer.tokenize(userInput);
         String[] processedTokens = ProcessTokens.spellCheckTokens(tokens);
         System.out.println("Processed Tokens: " + Arrays.toString(processedTokens));
-        return checkForEntities(processedTokens);
+        return checkForEntities(processedTokens, userInput);
     }
 
     /**
      * Analysiert die Tokens und gibt den Satz der höchst priorisierten erkannten Entität zurück.
      * @param processedTokens Die gefilterten und korrigierten Tokens des UserInputs
+     * @param userInput User Input für die Erweiterung für den Ausblick, um der API den userInput zu schicken
      * @return Der Satz der höchst priorisierten erkannten Entität oder die Standardnachricht, falls keine Entität erkannt wurde.
      */
-    public static String checkForEntities(String[] processedTokens) {
+    public static String checkForEntities(String[] processedTokens, String userInput) {
         String highestPrioritySentence = null;
         // Durchlaufen der Tokens und benutzerdefinierten Entitäten
         for (String token : processedTokens) {
@@ -75,6 +76,7 @@ public class AnalyzeTextFromChatbot {
         if (highestPrioritySentence != null) {
             return highestPrioritySentence;
         } else {
+            //return LlamaAnswerGenerator.getMessageFromLlama(userInput); //Ausblick: Bei keiner erkannten Entität API Aufruf
             return CustomEntitiesLoader.getStandardMessage();
         }
     }

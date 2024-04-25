@@ -42,15 +42,18 @@ const VisualChatbot = ({theme, setShowPopUp, setPopUpMessage, setColorPopUp}) =>
             setPopUpMessage('Zu viele Zeichen. Bitte kürzen Sie Ihre Nachricht.');
         } else {
             const request = { userInput: userInput };
+            setMessages((prevMessages) => [
+                ...prevMessages,
+                { role: 'user', content: userInput },
+            ]);
+            setUserInput('');
             ChatbotService.analyzePost(request)
                 .then((response) => {
                     setMessages((prevMessages) => [
                         ...prevMessages,
-                        { role: 'user', content: userInput },
                         { role: 'bot', content: response },
                     ]);
                     setCharCount(0);
-                    setUserInput('');
                 })
                 .catch((error) => {
                     setShowPopUp(true);
