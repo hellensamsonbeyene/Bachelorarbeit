@@ -183,7 +183,7 @@ public class CustomEntitiesLoader {
             boolean entitiesSection = false;
 
             while ((line = reader.readLine()) != null) {
-                if (line.trim().equals("#Entitäten")) {
+                if (line.trim().equals("#Entitäten und Antworten")) {
                     entitiesSection = true;
                     continue;
                 }

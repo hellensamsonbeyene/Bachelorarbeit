@@ -73,7 +73,7 @@ const VisualChatbot = ({theme, setShowPopUp, setPopUpMessage, setColorPopUp}) =>
     };
 
     return (
-        <div style={{ width: '600px', margin: 'auto', padding: '20px', borderRadius: '10px', boxShadow: '0 0 10px rgba(0,0,0,0.1)', backgroundColor: theme.primary }}>
+        <div style={{ width: '500px', margin: 'auto', padding: '20px', borderRadius: '10px', boxShadow: '0 0 10px rgba(0,0,0,0.1)', backgroundColor: theme.primary }}>
             <Typography variant="h5" gutterBottom style={{ textAlign: 'center', color: '#ffff' }}>
                 Chatbot
             </Typography>

@@ -1,7 +1,7 @@
 #Standardnachricht
 Entschuldigung, das habe ich nicht verstanden.
 
-#Entitäten
+#Entitäten und Antworten
 Vorlesung : Besuchen Sie interessante Vorlesungen zu verschiedenen Fachgebieten.
 Professoren : Unsere erfahrenen Professoren stehen Ihnen für Fragen und Diskussionen zur Verfügung.
 Professorin: Test1.

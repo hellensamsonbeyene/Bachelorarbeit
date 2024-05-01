@@ -5,6 +5,11 @@ const HowToChatbot = () => {
     return (
         <div className="how-to-container">
             <h1>So erstellst du deinen eigenen Chatbot:</h1>
+            <h2>0. Zunächst ist der ZEKI-Chatbot aktiv</h2>
+                <div className="how-to-step">
+                    Probiere ihn gerne aus! <br/>
+                    Mit dem Button "Zurücksetzen" kannst du den Chatbot jederzeit auf den <br/>ZEKI-Chatbot zurücksetzen!
+                </div>
             <h2>1. Bereite deine strukturierte Textdatei vor:</h2>
             <div className="how-to-step">
                 Erstelle eine Textdatei in folgendem Format:
@@ -13,7 +18,7 @@ const HowToChatbot = () => {
         {`    #Standardnachricht
     [Standardnachricht]
     
-    #Entitäten
+    #Entitäten und Antworten
     [Entitätsname] : [Entitätsantwort]`}
       </pre>
             <div className="how-to-step">
@@ -26,16 +31,18 @@ const HowToChatbot = () => {
             <h3 className="how-to-subtitle">Beispiel:</h3>
             <pre>
         {`    #Standardnachricht
-    Das habe ich leider nicht verstanden.
-    
-    #Entitäten
-    Vorlesung : Besuchen Sie interessante Vorlesungen zu verschiedenen Fachgebieten.
-    Professoren : Unsere erfahrenen Professoren stehen Ihnen für Fragen zur Verfügung.
-    Bibliothek : Nutzen Sie unsere gut ausgestattete Bibliothek für Ihr Studium.`}
+                
+    Versuchen Sie es erneut.
+                
+    #Entitäten und Antworten
+                
+    Hallo: Guten Tag! Willkommen!
+    Morgen: Guten Morgen!
+    Hilfe: Wie kann ich Ihnen helfen?`}
       </pre>
             <h2>2. Speichern und Hochladen:</h2>
             <p className="how-to-step">
-                Speichere die Datei im <code>.txt</code> Format. <br />Klicke auf
+                Speichere die Datei im <code>.txt</code> Format. <br/>Klicke auf
                 "Datei hochladen" und wähle deine vorbereitete <code>.txt</code>-
                 Datei aus.
             </p>
