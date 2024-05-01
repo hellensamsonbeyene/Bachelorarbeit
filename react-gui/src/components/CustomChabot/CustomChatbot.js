@@ -29,34 +29,40 @@ const CustomChatbot = ({theme, setShowPopUp, setPopUpMessage, setColorPopUp}) =>
     };
 
     return (
-        <div style={{display: 'flex', marginTop: '50px'}}>
             <ThemeProvider theme={theme}>
-                <Grid container alignItems="center" justifyContent="flex-end" direction="column">
-                    <Grid item xs={1}>
-                        <FileDropArea setShowPopUp={setShowPopUp} setPopUpMessage={setPopUpMessage} setColorPopUp={setColorPopUp} />
+                <Grid container alignItems="center" justifyContent="flex-start" direction="row">
+                    <Grid item xs={4}>
+                        <Grid container alignItems="center" justifyContent="flex-end" direction="column">
+                            <Grid item xs={3}>
+                                <FileDropArea setShowPopUp={setShowPopUp} setPopUpMessage={setPopUpMessage} setColorPopUp={setColorPopUp} />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <CustomTooltip title="Chatbot zurücksetzen">
+                                    <Button
+                                        variant="contained"
+                                        style={{ backgroundColor: theme.primary, color: theme.white }}
+                                        onClick={resetChatbot}
+                                    >Zurücksetzen auf BeispielChatbot</Button>
+                                </CustomTooltip>
+                            </Grid>
+                        </Grid>
                     </Grid>
-                    <Grid item xs={5}>
-                        <CustomTooltip title="Chatbot zurücksetzen">
-                            <Button
-                                variant="contained"
-                                style={{ backgroundColor: theme.primary, color: theme.white }}
-                                onClick={resetChatbot}
-                            >Zurücksetzen auf BeispielChatbot</Button>
-                        </CustomTooltip>
+                    <Grid item xs={4}>
+                        <Grid container justifyContent="center">
+                            <Grid item>
+                                <VisualChatbot theme={theme} setColorPopUp={setColorPopUp} setShowPopUp={setShowPopUp} setPopUpMessage={setPopUpMessage}/>
+                            </Grid>
+                        </Grid>
                     </Grid>
-                </Grid>
-                <Grid container justifyContent="center">
-                    <Grid item>
-                        <VisualChatbot theme={theme} setColorPopUp={setColorPopUp} setShowPopUp={setShowPopUp} setPopUpMessage={setPopUpMessage}/>
-                    </Grid>
-                </Grid>
-                <Grid container justifyContent="center" alignItems="center">
-                    <Grid>
-                        <HowToChatbot theme={theme} />
+                    <Grid item xs={4}>
+                        <Grid container justifyContent="center" alignItems="center">
+                            <Grid>
+                                <HowToChatbot theme={theme} />
+                            </Grid>
+                        </Grid>
                     </Grid>
                 </Grid>
             </ThemeProvider>
-        </div>
     );
 };
 

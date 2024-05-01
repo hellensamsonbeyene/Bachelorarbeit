@@ -4,7 +4,7 @@ import '../../styling/styles.css';
 const HowToChatbot = () => {
     return (
         <div className="how-to-container">
-            <h1>So erstellst du deinen eigenen Chatbot:</h1>
+            <h1>So erstellst du deinen Chatbot:</h1>
             <h2>0. Zunächst ist der ZEKI-Chatbot aktiv</h2>
                 <div className="how-to-step">
                     Probiere ihn gerne aus! <br/>
@@ -28,13 +28,9 @@ const HowToChatbot = () => {
         Die Entitäten werden absteigend priorisiert, also achte auf die Reihenfolge deiner Entitäten!
         </span>
             </div>
-            <h3 className="how-to-subtitle">Beispiel:</h3>
+            <h3 className="how-to-subtitle">Beispiel für Entitäten:</h3>
             <pre>
-        {`    #Standardnachricht
-                
-    Versuchen Sie es erneut.
-                
-    #Entitäten und Antworten
+        {`    #Entitäten und Antworten
                 
     Hallo: Guten Tag! Willkommen!
     Morgen: Guten Morgen!
