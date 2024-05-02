@@ -68,7 +68,7 @@ public class StopwordsLoader {
 
         // Wenn Stoppwörter gefunden wurden, eine IOException werfen
         if (!foundStopwords.isEmpty()) {
-            StringBuilder errorMessage = new StringBuilder("Stoppwörter gefunden: ");
+            StringBuilder errorMessage = new StringBuilder("Die Textdatei enthält Wörter, die keine Entität sein dürfen, bitte ersetze die folgenden Wörter: ");
             for (String stopword : foundStopwords) {
                 errorMessage.append(stopword).append(", ");
             }
