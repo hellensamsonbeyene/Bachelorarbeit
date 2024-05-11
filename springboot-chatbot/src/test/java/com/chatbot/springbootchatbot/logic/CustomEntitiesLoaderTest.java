@@ -68,7 +68,7 @@ class CustomEntitiesLoaderTest {
     void uploadFile_WithValidFile_UpdatesCustomEntitiesAndStandardMessage() {
         CustomEntitiesLoader.customEntities = null;
         CustomEntitiesLoader.standardMessage = null;
-        MockMultipartFile file = new MockMultipartFile("file", "custom-entities.txt", "text/plain", "#Standardnachricht\n Sentence\n\n#Entitäten\n entity:sentence.".getBytes());
+        MockMultipartFile file = new MockMultipartFile("file", "custom-entities.txt", "text/plain", "#Standardnachricht\n Sentence\n\n#Entitäten und Antworten\n entity:sentence.".getBytes());
 
         ResponseEntity<String> responseEntity = CustomEntitiesLoader.uploadFile(file);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());

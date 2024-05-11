@@ -9,10 +9,7 @@ import javax.annotation.PostConstruct;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.AbstractMap;
+import java.util.*;
 
 /**
  * CustomEntitiesLoader ist für das Laden und Verwalten benutzerdefinierter Entitäten aus einer Textdatei verantwortlich
@@ -36,6 +33,8 @@ public class CustomEntitiesLoader {
     public static String getStandardMessage() {
         return standardMessage;
     }
+    public static List<String> duplicateEntities = new ArrayList<>();
+
 
     /**
      * Initialisieren und Laden benutzerdefinierter Entitäten aus der Textdatei.
@@ -82,8 +81,21 @@ public class CustomEntitiesLoader {
             saveFile(testFileAbsolutePath, file);
             List<Map.Entry<String, String>> loadedCustomEntities = loadCustomEntities(testFileAbsolutePath);
             String loadedStandardMessage = loadStandardMessage(testFileAbsolutePath);
+            System.out.println("loadedStandardMessage: " + (loadedStandardMessage==null)+ (duplicateEntities!=null));
 
             if (loadedCustomEntities ==null || loadedStandardMessage==null) {
+                if(!duplicateEntities.isEmpty()) {
+                    StringBuilder errorMessage = new StringBuilder("Die Textdateien enthält doppelte Entitäten, bitte korrigiere diese folgenden Wörter: ");
+                    for (String duplicate : duplicateEntities) {
+                        errorMessage.append(duplicate).append(", ");
+                    }
+                    errorMessage.deleteCharAt(errorMessage.length() - 1); // Remove last comma
+                    errorMessage.deleteCharAt(errorMessage.length() - 1); // Remove space
+                    CustomEntitiesLoader.deleteFile(new File(CustomEntitiesLoader.testFilePath).getAbsolutePath()); // delete testfile
+                    return new ResponseEntity<>(errorMessage.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+
+                    //throw new IOException(errorMessage.toString());
+                }
                 deleteFile(testFileAbsolutePath);
                 return new ResponseEntity<>("Die Standardnachricht oder die Entitäten sind leer. Bitte lade eine neue Datei hoch.", HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -177,6 +189,9 @@ public class CustomEntitiesLoader {
      */
     public static List<Map.Entry<String, String>> loadCustomEntities(String filePath) throws IOException {
         List<Map.Entry<String, String>> customEntitiesList = new ArrayList<>();
+        Set<String> entityKeys = new HashSet<>();
+        duplicateEntities = new ArrayList<>();
+
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
@@ -193,15 +208,27 @@ public class CustomEntitiesLoader {
                     if (parts.length == 2) {
                         String currentEntity = parts[0].trim().toLowerCase();
                         String sentence = parts[1].trim();
-                        // Überprüfung auf Stoppwörter
 
-                        customEntitiesList.add(new AbstractMap.SimpleEntry<>(currentEntity, sentence));
-                        System.out.println("Entität " + currentEntity + ", Satz: " + sentence);
+                        // Überprüfen, ob die Entität bereits vorhanden ist
+                        System.out.println("entitykeys"+ entityKeys+ "curren"+ currentEntity);
+                        if (!entityKeys.contains(currentEntity)) {
+                            entityKeys.add(currentEntity);
+                            customEntitiesList.add(new AbstractMap.SimpleEntry<>(currentEntity, sentence));
+                            System.out.println("Entität " + currentEntity + ", Satz: " + sentence);
+                        } else {
+                            // Wenn die Entität bereits existiert, zur Liste der Duplikate hinzufügen
+                            duplicateEntities.add(currentEntity);
+                        }
                     }
                 }
             }
         } catch (IOException e) {
             System.err.println("Fehler beim Laden benutzerdefinierter Entitäten aus der Datei: " + filePath + ". Details: " + e.getMessage());
+        }
+        System.out.println((duplicateEntities.isEmpty())+"test"+ duplicateEntities);
+
+        if (!duplicateEntities.isEmpty()) {
+            return null;
         }
         if (customEntitiesList.isEmpty()) {
             return null;

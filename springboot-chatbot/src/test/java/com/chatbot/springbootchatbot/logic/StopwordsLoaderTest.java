@@ -30,7 +30,7 @@ public class StopwordsLoaderTest {
         // Act & Assert
         IOException exception = assertThrows(IOException.class, () -> StopwordsLoader.checkForStopwords(entitiesWithStopwords));
 
-        assertTrue(exception.getMessage().contains("Stoppwörter gefunden"));
+        assertTrue(exception.getMessage().contains("bitte ersetze die folgenden Wörter: ich, du, es"));
     }
 
     @Test
@@ -53,7 +53,7 @@ public class StopwordsLoaderTest {
 
         IOException exception = assertThrows(IOException.class, () -> StopwordsLoader.checkForStopwords(customEntitiesList));
 
-        assertTrue(exception.getMessage().contains("Stoppwörter gefunden: an, aber"));
+        assertTrue(exception.getMessage().contains("bitte ersetze die folgenden Wörter: an, aber"));
     }
 
     @Test
