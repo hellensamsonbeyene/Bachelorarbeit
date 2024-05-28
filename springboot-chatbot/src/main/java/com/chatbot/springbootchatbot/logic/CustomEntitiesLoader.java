@@ -81,7 +81,6 @@ public class CustomEntitiesLoader {
             saveFile(testFileAbsolutePath, file);
             List<Map.Entry<String, String>> loadedCustomEntities = loadCustomEntities(testFileAbsolutePath);
             String loadedStandardMessage = loadStandardMessage(testFileAbsolutePath);
-            System.out.println("loadedStandardMessage: " + (loadedStandardMessage==null)+ (duplicateEntities!=null));
 
             if (loadedCustomEntities ==null || loadedStandardMessage==null) {
                 if(!duplicateEntities.isEmpty()) {
@@ -101,11 +100,9 @@ public class CustomEntitiesLoader {
             }
             //Überprüfen, ob Stoppwörter in den Entitäten existieren
             StopwordsLoader.checkForStopwords(loadedCustomEntities);
-            System.out.println(loadedCustomEntities + "loaded custom entities" + loadedStandardMessage );
             // Wenn alles erfolgreich war, aktualisiere die Werte
             boolean isDeleted = deleteFile(testFileAbsolutePath);
             if (isDeleted) {
-                System.out.println("Datei erfolgreich gelöscht.");
                 saveFile(new File(filePath).getAbsolutePath(), file);
                 customEntities = loadedCustomEntities;
                 standardMessage = loadedStandardMessage;
@@ -210,11 +207,9 @@ public class CustomEntitiesLoader {
                         String sentence = parts[1].trim();
 
                         // Überprüfen, ob die Entität bereits vorhanden ist
-                        System.out.println("entitykeys"+ entityKeys+ "curren"+ currentEntity);
                         if (!entityKeys.contains(currentEntity)) {
                             entityKeys.add(currentEntity);
                             customEntitiesList.add(new AbstractMap.SimpleEntry<>(currentEntity, sentence));
-                            System.out.println("Entität " + currentEntity + ", Satz: " + sentence);
                         } else {
                             // Wenn die Entität bereits existiert, zur Liste der Duplikate hinzufügen
                             duplicateEntities.add(currentEntity);
@@ -225,14 +220,13 @@ public class CustomEntitiesLoader {
         } catch (IOException e) {
             System.err.println("Fehler beim Laden benutzerdefinierter Entitäten aus der Datei: " + filePath + ". Details: " + e.getMessage());
         }
-        System.out.println((duplicateEntities.isEmpty())+"test"+ duplicateEntities);
-
         if (!duplicateEntities.isEmpty()) {
             return null;
         }
         if (customEntitiesList.isEmpty()) {
             return null;
         }
+
         return customEntitiesList;
     }
 }

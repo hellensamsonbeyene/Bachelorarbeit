@@ -20,7 +20,6 @@ public class AnalyzeTextFromChatbot {
     static {
         init();
     }
-    static List<Map.Entry<String, String>> customEntities = CustomEntitiesLoader.getCustomEntities();
 
 
     private static void init() {
@@ -56,6 +55,8 @@ public class AnalyzeTextFromChatbot {
      * @return Der Satz der höchst priorisierten erkannten Entität oder die Standardnachricht, falls keine Entität erkannt wurde.
      */
     public static String checkForEntities(String[] processedTokens, String userInput) {
+        List<Map.Entry<String, String>> customEntities = CustomEntitiesLoader.getCustomEntities();
+
         String highestPrioritySentence = null;
         // Durchlaufen der Tokens und benutzerdefinierten Entitäten
         for (String token : processedTokens) {
