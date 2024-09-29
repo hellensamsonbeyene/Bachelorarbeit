@@ -11,7 +11,7 @@ class ProcessTokensTest {
     @Test
     void processTokens_NoCustomEntities_ReturnsOriginalTokens() {
         String[] tokens = {"word1", "word2", "word3"};
-        ProcessTokens.customEntities = List.of();
+        CustomEntitiesLoader.customEntities = List.of();
         String[] expected = {"word1", "word2", "word3"};
         assertArrayEquals(expected, ProcessTokens.spellCheckTokens(tokens));
     }
@@ -19,7 +19,7 @@ class ProcessTokensTest {
     @Test
     void processTokens_WithCustomEntities_ReplacesTokensWithClosestEntity() {
         String[] tokens = {"cat", "dog", "rabit"};
-        ProcessTokens.customEntities = List.of(
+        CustomEntitiesLoader.customEntities = List.of(
                 new AbstractMap.SimpleEntry<>("dog", "animal"),
                 new AbstractMap.SimpleEntry<>("rabbit", "animal")
         );
